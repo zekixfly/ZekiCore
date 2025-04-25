@@ -1,4 +1,4 @@
-import { $, $$, getId, getIds, getTags,  } from "./dom.js";
+import { $, $$, getId, getIds, getTag, getClass, makeTag, makeText,  } from "./dom.js";
 import { setDebug, log } from "./debug.js";
 
 export const ZekiCore = {};
@@ -29,8 +29,26 @@ Object.defineProperties(ZekiCore, {
     writable: false,
     configurable: false,
   },
-  "getTags": {
-    value: getTags,
+  "getTag": {
+    value: getTag,
+    enumerable: false,
+    writable: false,
+    configurable: false,
+  },
+  "getClass": {
+    value: getClass,
+    enumerable: false,
+    writable: false,
+    configurable: false,
+  },
+  "makeTag": {
+    value: makeTag,
+    enumerable: false,
+    writable: false,
+    configurable: false,
+  },
+  "makeText": {
+    value: makeText,
     enumerable: false,
     writable: false,
     configurable: false,

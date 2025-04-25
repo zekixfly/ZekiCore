@@ -42,9 +42,36 @@ export function getIds(arr) {
 
 /**
  * get elements by tag name.
- * @param {string} tags - 標籤名稱
+ * @param {string} tagName - 元素名稱
  * @returns {HTMLCollection} - 對應的 DOM 元素集合
  */
-export function getTags(tags) {
-  return document.getElementsByTagName(tags);
+export function getTag(tagName) {
+  return document.getElementsByTagName(tagName);
+}
+
+/**
+ * get multiple class element
+ * @param {*} className - 類別名稱
+ * @returns {HTMLCollection} - 對應的 DOM 元素集合
+ */
+export function getClass(className) {
+  return document.getElementsByClassName(className);
+}
+
+/**
+ * create elements by name.
+ * @param {string} tagName - 元素名稱
+ * @returns {NodeList} - 對應的 DOM 元素集合
+ */
+export function makeTag(tagName) {
+  return document.createElement(tagName);
+}
+
+/**
+ * create text node.
+ * @param {string} textContnet - 文字內容
+ * @returns {Text} - 對應的 DOM 文字節點
+ */
+export function makeText(textContnet) {
+  return document.createTextNode(textContnet);
 }
