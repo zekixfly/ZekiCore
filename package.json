@@ -1,0 +1,34 @@
+{
+  "name": "zekicore",
+  "version": "1.0.0",
+  "main": "ZekiCore.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^28.0.3",
+    "@rollup/plugin-node-resolve": "^16.0.1",
+    "@rollup/plugin-terser": "^0.4.4",
+    "rollup": "^4.40.0"
+  },
+  "dependencies": {
+    "commondir": "^1.0.1",
+    "deepmerge": "^4.3.1",
+    "estree-walker": "^2.0.2",
+    "fdir": "^6.4.4",
+    "function-bind": "^1.1.2",
+    "hasown": "^2.0.2",
+    "is-core-module": "^2.16.1",
+    "is-module": "^1.0.0",
+    "is-reference": "^1.2.1",
+    "magic-string": "^0.30.17",
+    "path-parse": "^1.0.7",
+    "picomatch": "^4.0.2",
+    "resolve": "^1.22.10",
+    "supports-preserve-symlinks-flag": "^1.0.0"
+  },
+  "description": ""
+}
