@@ -1,7 +1,28 @@
 <!-- index.html -->
-<script src="dist/ZekiCore.js"></script>
-<script>
-  zk.setDebug(true);
-  zk.log('Hello Zeki!');
-  const el = zk.$('#app');
-</script>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="dist/ZekiCore.js"></script>
+  </head>
+  <body>
+    <div id="root" msg="Hello Tag!!">
+      <nav></nav>
+
+      <article>
+        <aside></aside>
+        <section></section>
+      </article>
+
+      <footer></footer>
+    </div>
+    <script>
+      zk.setDebug(true);
+      zk.log("Hello Zeki!");
+      const el = zk.getId("root").getAttr("msg");
+      console.log(el);
+    </script>
+  </body>
+</html>

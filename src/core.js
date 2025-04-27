@@ -1,18 +1,18 @@
-import { $, $$, getId, getIds, getTag, getClass, makeTag, makeText,  } from "./dom.js";
+import {  one, all, getId, getIds, getTag, getClass, makeTag, makeText,  } from "./dom.js";
 import { setDebug, log } from "./debug.js";
 
 export const ZekiCore = {};
 
 // 使用 defineProperty 加到命名空間上（不可列舉與不可寫入）
 Object.defineProperties(ZekiCore, {
-  "$": {
-    value: $,
+  "one": {
+    value: one,
     enumerable: false,
     writable: false,
     configurable: false,
   },
-  "$$": {
-    value: $$,
+  "all": {
+    value: all,
     enumerable: false,
     writable: false,
     configurable: false,

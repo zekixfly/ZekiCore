@@ -1,20 +1,23 @@
 // src/dom.js
 
+import { ZekiElement } from './dom-ext.js';
+
 /**
- * 
- * @param {*} selector 
- * @returns 
+ * get element by selector.
+ * @param {string} selector - CSS 選擇器
+ * @returns {HTMLElement} - 對應的 DOM 元素
  */
-export function $(selector) {
-  return document.querySelector(selector);
+export function one(selector) {
+  const el = document.querySelector(selector);
+  return el ? new ZekiElement(el): null;
 }
 
 /**
- * 
- * @param {*} selector 
- * @returns 
+ * get elements by selector.
+ * @param {string} selector - CSS 選擇器
+ * @returns {NodeList} - 對應的 DOM 元素集合
  */
-export function $$(selector) {
+export function all(selector) {
   return document.querySelectorAll(selector);
 }
 
@@ -24,7 +27,8 @@ export function $$(selector) {
  * @returns {HTMLElement} - 對應的 DOM 元素
  */
 export function getId(id) {
-  return document.getElementById(id);
+  const el = document.getElementById(id);
+  return el ? new ZekiElement(el): null;
 }
 
 /**
@@ -50,7 +54,7 @@ export function getTag(tagName) {
 }
 
 /**
- * get multiple class element
+ * get elements by class name.
  * @param {*} className - 類別名稱
  * @returns {HTMLCollection} - 對應的 DOM 元素集合
  */
@@ -59,7 +63,7 @@ export function getClass(className) {
 }
 
 /**
- * create elements by name.
+ * create elements by tag name.
  * @param {string} tagName - 元素名稱
  * @returns {NodeList} - 對應的 DOM 元素集合
  */
