@@ -9,6 +9,7 @@
   </head>
   <body>
     <div id="root" msg="Hello Tag!!">
+      <div id="hwBtn">Button</div>
       <nav></nav>
 
       <article>
@@ -23,6 +24,11 @@
       zk.log("Hello Zeki!");
       const el = zk.getId("root").getAttr("msg");
       console.log(el);
+      const handler = function () {
+        zk.log("Hello Zeki! Button Clicked!");
+      };
+      zk.getId('hwBtn').on('click', handler);
+      // zk.getId('hwBtn').off('click', handler);
     </script>
   </body>
 </html>

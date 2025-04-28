@@ -1,9 +1,11 @@
-import {  one, all, getId, getIds, getTag, getClass, makeTag, makeText,  } from "./dom.js";
+import {  one, all, getId, getIds, getTag, getClass } from "./dom-select.js";
+import {  makeTag, makeText,  } from "./dom-create.js";
+import { importJS, loadZekiImports } from "./loader.js";
 import { setDebug, log } from "./debug.js";
 
 export const ZekiCore = {};
 
-// 使用 defineProperty 加到命名空間上（不可列舉與不可寫入）
+// 使用 defineProperty 加到命名空間上（不可列舉、不可寫入與不可配置）
 Object.defineProperties(ZekiCore, {
   "one": {
     value: one,
@@ -49,6 +51,18 @@ Object.defineProperties(ZekiCore, {
   },
   "makeText": {
     value: makeText,
+    enumerable: false,
+    writable: false,
+    configurable: false,
+  },
+  "importJS": {
+    value: importJS,
+    enumerable: false,
+    writable: false,
+    configurable: false,
+  },
+  "loadZekiImports": {
+    value: loadZekiImports,
     enumerable: false,
     writable: false,
     configurable: false,

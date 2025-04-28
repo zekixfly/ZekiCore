@@ -1,6 +1,6 @@
-// src/dom.js
+// src/dom-select.js
 
-import { ZekiElement } from './dom-ext.js';
+import { ZekiElement } from "./dom-manipulate.js";
 
 /**
  * get element by selector.
@@ -9,7 +9,7 @@ import { ZekiElement } from './dom-ext.js';
  */
 export function one(selector) {
   const el = document.querySelector(selector);
-  return el ? new ZekiElement(el): null;
+  return el ? new ZekiElement(el) : null;
 }
 
 /**
@@ -18,7 +18,9 @@ export function one(selector) {
  * @returns {NodeList} - 對應的 DOM 元素集合
  */
 export function all(selector) {
-  return document.querySelectorAll(selector);
+  return Array.from(document.querySelectorAll(selector)).map(
+    (el) => new ZekiElement(el)
+  );
 }
 
 /**
@@ -28,7 +30,7 @@ export function all(selector) {
  */
 export function getId(id) {
   const el = document.getElementById(id);
-  return el ? new ZekiElement(el): null;
+  return el ? new ZekiElement(el) : null;
 }
 
 /**
@@ -37,11 +39,15 @@ export function getId(id) {
  * @returns {Array} - 對應的 DOM 元素陣列
  */
 export function getIds(arr) {
-  let stack = [];
-  for(var i=0; i<arr.length; i++) {
-    stack.push(document.getElementById(arr[i]));
-  }
-  return stack;
+  return arr.filter((id) => {
+    const el = getId(id);
+    if (el) {
+      return new ZekiElement(el);
+    } else {
+      console.warn(`getIds: ${id} is not exist`);
+      return null;
+    }
+  });
 }
 
 /**
@@ -50,7 +56,9 @@ export function getIds(arr) {
  * @returns {HTMLCollection} - 對應的 DOM 元素集合
  */
 export function getTag(tagName) {
-  return document.getElementsByTagName(tagName);
+  return Array.from(document.getElementsByTagName(tagName)).map(
+    (el) => new ZekiElement(el)
+  );
 }
 
 /**
@@ -59,23 +67,7 @@ export function getTag(tagName) {
  * @returns {HTMLCollection} - 對應的 DOM 元素集合
  */
 export function getClass(className) {
-  return document.getElementsByClassName(className);
-}
-
-/**
- * create elements by tag name.
- * @param {string} tagName - 元素名稱
- * @returns {NodeList} - 對應的 DOM 元素集合
- */
-export function makeTag(tagName) {
-  return document.createElement(tagName);
-}
-
-/**
- * create text node.
- * @param {string} textContnet - 文字內容
- * @returns {Text} - 對應的 DOM 文字節點
- */
-export function makeText(textContnet) {
-  return document.createTextNode(textContnet);
+  return Array.from(document.getElementsByClassName(className)).map(
+    (el) => new ZekiElement(el)
+  );
 }
