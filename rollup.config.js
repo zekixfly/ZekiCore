@@ -15,6 +15,8 @@ export default defineConfig({
   plugins: [
     resolve(),
     commonjs(),
-    terser() // 可選：壓縮 JS
+    terser({
+      keep_classnames: true, // 保留類別名稱
+    }) // 可選：壓縮 JS
   ],
 });

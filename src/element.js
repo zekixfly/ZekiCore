@@ -1,4 +1,4 @@
-// src/dom-manipulate.js
+// src/element.js
 export class ZekiElement {
   constructor(el) {
     this.el = el;
@@ -9,7 +9,9 @@ export class ZekiElement {
    * @returns {HTMLCollection} - 對應的 DOM 元素集合
    */
   getTag(tag) {
-    return this.el.getElementsByTagName(tag);
+    return Array.from(this.el.getElementsByTagName(tag)).map(
+      (el) => new ZekiElement(el)
+    );
   }
   /**
    * get elements by class name.
@@ -17,7 +19,9 @@ export class ZekiElement {
    * @returns {HTMLCollection} - 對應的 DOM 元素集合
    */
   getClass(className) {
-    return this.el.getElementsByClassName(className);
+    return Array.from(this.el.getElementsByClassName(className)).map(
+      (el) => new ZekiElement(el)
+    );
   }
   /**
    * get attribute
@@ -61,7 +65,9 @@ export class ZekiElement {
    * @returns {ZekiElement} - 返回當前的 ZekiElement 實例
    */
   addKid(child) {
-    this.el.appendChild(child);
+    child.hasOwnProperty("el")
+      ? this.el.appendChild(child.el)
+      : this.el.appendChild(child);
     return this;
   }
   /**
@@ -70,7 +76,11 @@ export class ZekiElement {
    * @returns {ZekiElement} - 返回當前的 ZekiElement 實例
    */
   addKids(children) {
-    children.forEach((child) => this.el.appendChild(child));
+    children.forEach((child) => {
+      child.hasOwnProperty("el")
+        ? this.el.appendChild(child.el)
+        : this.el.appendChild(child);
+    });
     return this;
   }
   /**
@@ -117,13 +127,13 @@ export class ZekiElement {
     const siblings = [];
     let p = this.el.previousSibling;
     while (p) {
-      if (p.nodeType === 1) siblings.push(p);
+      if (p.nodeType === 1) siblings.push(new ZekiElement(p));
       p = p.previousSibling;
     }
     siblings.reverse();
     let n = this.el.nextSibling;
     while (n) {
-      if (n.nodeType === 1) siblings.push(n);
+      if (n.nodeType === 1) siblings.push(new ZekiElement(n));
       n = n.nextSibling;
     }
     return siblings;
@@ -149,9 +159,9 @@ export class ZekiElement {
   }
   /**
    *
-   * @param {*} eventType 
-   * @param {*} handler 
-   * @param {*} options 
+   * @param {*} eventType
+   * @param {*} handler
+   * @param {*} options
    * @returns {ZekiElement} - 返回當前的 ZekiElement 實例
    */
   on(eventType, handler, options = false) {
@@ -161,8 +171,8 @@ export class ZekiElement {
   }
   /**
    *
-   * @param {*} eventType 
-   * @param {*} handler 
+   * @param {*} eventType
+   * @param {*} handler
    * @returns {ZekiElement} - 返回當前的 ZekiElement 實例
    */
   off(eventType, handler) {
