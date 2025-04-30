@@ -31,7 +31,7 @@
       zk.setDebug(true);
       zk.log("Hello Zeki!");
       const el = zk.getId("root").getAttr("msg");
-      console.log(el);
+      zk.log(el);
       const handler = function () {
         zk.log("Hello Zeki! Button Clicked!");
       };

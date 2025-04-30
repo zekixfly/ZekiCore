@@ -7,7 +7,7 @@ import terser from '@rollup/plugin-terser';
 export default defineConfig({
   input: 'src/index.js',
   output: {
-    file: 'Chatroom/dist/ZekiCore.js',
+    file: 'dist/ZekiCore.js',
     format: 'iife',
     name: 'ZekiCore', // 全域變數名稱 window.ZekiCore
     sourcemap: true,

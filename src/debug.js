@@ -14,5 +14,5 @@ export function setDebug(value) {
  * @param  {...any} args 
  */
 export function log(...args) {
-  if (isDebug) console.log("[ZekiCore Log]:", ...args);
+  if (isDebug) console.log("[ZekiCore Debug]:", ...args);
 }
