@@ -1,31 +1,32 @@
 // src/element.js
+import { ZekiCollection } from "./collection.js";
 export class ZekiElement {
   constructor(el) {
     this.el = el;
   }
   /**
    * get elements by tag name.
-   * @param {*} tag
-   * @returns {HTMLCollection} - 對應的 DOM 元素集合
+   * @param {string} tagName
+   * @returns {ZekiCollection} - 對應的 DOM 元素集合
    */
-  getTag(tag) {
-    return Array.from(this.el.getElementsByTagName(tag)).map(
-      (el) => new ZekiElement(el)
-    );
+  getTag(tagName) {
+    const htmlCollection = this.el.getElementsByTagName(tagName);
+    const elements = Array.from(htmlCollection, (el) => new ZekiElement(el));
+    return new ZekiCollection(elements);
   }
   /**
    * get elements by class name.
-   * @param {*} className
-   * @returns {HTMLCollection} - 對應的 DOM 元素集合
+   * @param {stirng} className
+   * @returns {ZekiCollection} - 對應的 DOM 元素集合
    */
   getClass(className) {
-    return Array.from(this.el.getElementsByClassName(className)).map(
-      (el) => new ZekiElement(el)
-    );
+    const htmlCollection = this.el.getElementsByClassName(className);
+    const elements = Array.from(htmlCollection, (el) => new ZekiElement(el));
+    return new ZekiCollection(elements);
   }
   /**
    * get attribute
-   * @param {*} attr
+   * @param {string} attr - DOM 元素屬性名稱
    * @returns {string} - 對應的 DOM 元素屬性值
    */
   getAttr(attr) {
@@ -33,8 +34,8 @@ export class ZekiElement {
   }
   /**
    * set attribute
-   * @param {*} key
-   * @param {*} val
+   * @param {string} key - DOM 元素屬性名稱
+   * @param {string} val - DOM 元素屬性值
    * @returns {ZekiElement} - 返回當前的 ZekiElement 實例
    */
   setAttr(key, val) {
@@ -52,7 +53,7 @@ export class ZekiElement {
   }
   /**
    * delete attribute
-   * @param {*} attr
+   * @param {string} attr - DOM 元素屬性名稱
    * @returns {ZekiElement} - 返回當前的 ZekiElement 實例
    */
   delAttr(attr) {
@@ -61,7 +62,7 @@ export class ZekiElement {
   }
   /**
    * append Child
-   * @param {*} child
+   * @param {*} child - DOM 元素或 ZekiElement 實例
    * @returns {ZekiElement} - 返回當前的 ZekiElement 實例
    */
   addKid(child) {
@@ -72,10 +73,10 @@ export class ZekiElement {
   }
   /**
    * batch append Child
-   * @param {*} children
+   * @param {Array} children - DOM 元素或 ZekiElement 實例的陣列
    * @returns {ZekiElement} - 返回當前的 ZekiElement 實例
    */
-  addKids(children) {
+  addKids(...children) {
     children.forEach((child) => {
       child.hasOwnProperty("el")
         ? this.el.appendChild(child.el)
@@ -85,25 +86,41 @@ export class ZekiElement {
   }
   /**
    * remove Child
-   * @param {*} child
+   * @param {*} child - DOM 元素或 ZekiElement 實例
    * @returns {ZekiElement} - 返回當前的 ZekiElement 實例
    */
   delKid(child) {
-    this.el.removeChild(child);
+    child.hasOwnProperty("el")
+      ? this.el.removeChild(child.el)
+      : this.el.removeChild(child);
     return this;
   }
   /**
    * batch remove Child
-   * @param {*} children
+   * @param {Array} children - DOM 元素或 ZekiElement 實例的陣列
    * @returns {ZekiElement} - 返回當前的 ZekiElement 實例
    */
   delKids(children) {
-    children.forEach((child) => this.el.removeChild(child));
+    children.forEach((child) => {
+      child.hasOwnProperty("el")
+        ? this.el.removeChild(child.el)
+        : this.el.removeChild(child);
+    });
+    return this;
+  }
+  /**
+   * 
+   * @param {*} newNode - 新的 DOM 元素或 ZekiElement 實例
+   * @param {*} referenceNode 
+   * @returns 
+   */
+  before(newNode, referenceNode) {
+    this.el.insertBefore(newNode, referenceNode);
     return this;
   }
   /**
    * add Class
-   * @param {*} className
+   * @param {string} className - 要添加的類名
    * @returns {ZekiElement} - 返回當前的 ZekiElement 實例
    */
   addClass(className) {
@@ -112,16 +129,17 @@ export class ZekiElement {
   }
   /**
    * remove Class
-   * @param {*} className
+   * @param {string} className - 要刪除的類名
    * @returns {ZekiElement} - 返回當前的 ZekiElement 實例
    */
   delClass(className) {
     this.el.classList.remove(className);
     return this;
   }
+  
   /**
    * getId('id').siblings().delClass('style').addClass('style2');
-   * @returns {Array} - 返回當前元素的兄弟元素集合
+   * @returns {ZekiCollection} - 返回當前元素的兄弟元素集合
    */
   siblings() {
     const siblings = [];
@@ -136,7 +154,7 @@ export class ZekiElement {
       if (n.nodeType === 1) siblings.push(new ZekiElement(n));
       n = n.nextSibling;
     }
-    return siblings;
+    return new ZekiCollection(siblings);
   }
   /**
    *
@@ -159,9 +177,9 @@ export class ZekiElement {
   }
   /**
    *
-   * @param {*} eventType
-   * @param {*} handler
-   * @param {*} options
+   * @param {string} eventType - 事件類型
+   * @param {function} handler - 事件處理函數
+   * @param {boolean} options - 是否使用捕獲模式
    * @returns {ZekiElement} - 返回當前的 ZekiElement 實例
    */
   on(eventType, handler, options = false) {
@@ -171,8 +189,8 @@ export class ZekiElement {
   }
   /**
    *
-   * @param {*} eventType
-   * @param {*} handler
+   * @param {string} eventType - 事件類型
+   * @param {function} handler - 事件處理函數
    * @returns {ZekiElement} - 返回當前的 ZekiElement 實例
    */
   off(eventType, handler) {

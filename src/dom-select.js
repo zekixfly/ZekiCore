@@ -64,7 +64,7 @@ export function getTag(tagName) {
 
 /**
  * get elements by class name.
- * @param {*} className - 類別名稱
+ * @param {string} className - 類別名稱
  * @returns {ZekiCollection} - 對應的 DOM 元素集合
  */
 export function getClass(className) {
