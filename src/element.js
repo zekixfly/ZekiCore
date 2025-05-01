@@ -198,4 +198,49 @@ export class ZekiElement {
     this.el.removeEventListener(eventType, handler);
     return this;
   }
+  get html() {
+    return this.el.innerHTML;
+  }
+  set html(html) {
+    this.el.innerHTML = html;
+    return this;
+  }
+  get text() {
+    return this.el.innerText;
+  }
+  set text(text) {
+    this.el.innerText = text;
+    return this;
+  }
+  get value() {
+    return this.el.value;
+  }
+  set value(value) {
+    this.el.value = value;
+    return this;
+  }
+  get id() {
+    return this.el.id;
+  }
+  set id(id) {
+    this.el.id = id;
+    return this;
+  }
+  get className() {
+    return this.el.className;
+  }
+  set className(className) {
+    this.el.className = className;
+    return this;
+  }
+  get disabled() {
+    return this.el.disabled;
+  }
+  set disabled(disabled) {
+    this.el.disabled = disabled;
+    return this;
+  }
+  get kidNodes() {
+    return this.el.childNodes;
+  }
 }
