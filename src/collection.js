@@ -1,4 +1,5 @@
 // src/collection.js
+import { ZekiElement } from "./element.js";
 export class ZekiCollection extends Array {
   constructor(elements = []) {
     super(); // 呼叫父類別的建構子
@@ -9,8 +10,8 @@ export class ZekiCollection extends Array {
 }
 
 function addClass(className) {
-  this.forEach((item) =>
-    item.hasOwnProperty("el")
+  this.forEach((item) => 
+  (item instanceof ZekiElement)
       ? item.el.classList.add(className)
       : item.classList.add(className)
   );
@@ -19,7 +20,7 @@ function addClass(className) {
 
 function delClass(className) {
   this.forEach((item) =>
-    item.hasOwnProperty("el")
+    (item instanceof ZekiElement)
       ? item.el.classList.remove(className)
       : item.classList.remove(className)
   );
@@ -27,41 +28,36 @@ function delClass(className) {
 }
 
 function siblings() {
-  const resultSet = new Set();
+  const siblings = [];
+  const elements = this.map(item => item.el); // 取得 DOM 元素
 
-  for (let i = 0; i < this.length; i++) {
-    const el = this[i].el; // 取得 DOM 元素
+  for (let i = 0; i < elements.length; i++) {
 
     // 處理前面的兄弟元素
-    let prev = el.previousSibling;
-    while (prev) {
-      if (prev.nodeType === 1 && !this.includes(prev)) {
-        resultSet.add(prev);
-      }
-      prev = prev.previousSibling;
+    let p = elements[i].previousSibling;
+    while (p) {
+      if (p.nodeType === 1 && !elements.includes(p)) siblings.push(new ZekiElement(p));
+      p = p.previousSibling;
     }
 
     // 處理後面的兄弟元素
-    let next = el.nextSibling;
-    while (next) {
-      if (next.nodeType === 1 && !this.includes(next)) {
-        resultSet.add(next);
-      }
-      next = next.nextSibling;
+    let n = elements[i].nextSibling;
+    while (n) {
+      if (n.nodeType === 1 && !elements.includes(n)) siblings.push(new ZekiElement(n));
+      n = n.nextSibling;
     }
   }
 
-  // 轉回 array，依據原始 DOM 結構順序排序
-  const allSiblings = Array.from(resultSet);
-  allSiblings.sort((a, b) => {
-    if (a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_PRECEDING) {
+  // 依據原始 DOM 結構順序排序
+  siblings.sort((a, b) => {
+    if (a.el.compareDocumentPosition(b.el) & Node.DOCUMENT_POSITION_PRECEDING) {
       return 1;
     } else {
       return -1;
     }
   });
 
-  return new ZekiCollection(allSiblings);
+  return new ZekiCollection(siblings);
 }
 
 function length() {
