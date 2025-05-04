@@ -1,6 +1,6 @@
 // src/dom-select.js
 import { ZekiElement } from "./element.js";
-import { ZekiCollection } from './collection.js';
+import { ZekiCollection } from './core.js';
 
 /**
  * get element by selector.

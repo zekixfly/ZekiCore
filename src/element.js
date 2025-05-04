@@ -1,5 +1,6 @@
 // src/element.js
-import { ZekiCollection } from "./collection.js";
+import { ZekiCollection } from "./core.js";
+
 export class ZekiElement {
   constructor(el) {
     this.el = el;

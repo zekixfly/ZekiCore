@@ -1,49 +1,57 @@
 // src/collection.js
 import { ZekiElement } from "./element.js";
-export class ZekiCollection extends Array {
-  constructor(elements = []) {
-    super(); // 呼叫父類別的建構子
-    for (let i = 0; i < elements.length; i++) {
-      this[i] = elements[i];
-    }
-  }
-}
+import { ZekiCollection } from "./core.js";
 
-function addClass(className) {
-  this.forEach((item) => 
-  (item instanceof ZekiElement)
+/**
+ * 新增 class 名稱到 DOM 元素
+ * @param {string} className - 要新增的 class 名稱
+ * @returns {ZekiCollection} - 對應的 DOM 元素集合
+ */
+export function addClass(className) {
+  this.forEach((item) =>
+    item instanceof ZekiElement
       ? item.el.classList.add(className)
       : item.classList.add(className)
   );
   return this; // 支援鏈式呼叫
 }
 
-function delClass(className) {
+/**
+ * 刪除 DOM 元素的 class 名稱
+ * @param {string} className - 要刪除的 class 名稱
+ * @returns {ZekiCollection} - 對應的 DOM 元素集合
+ */
+export function delClass(className) {
   this.forEach((item) =>
-    (item instanceof ZekiElement)
+    item instanceof ZekiElement
       ? item.el.classList.remove(className)
       : item.classList.remove(className)
   );
   return this; // 支援鏈式呼叫
 }
 
-function siblings() {
+/**
+ * 取得當前類陣列的兄弟元素集合
+ * @returns {ZekiCollection} - 返回當前類陣列元素之外的兄弟元素集合
+ */
+export function siblings() {
   const siblings = [];
-  const elements = this.map(item => item.el); // 取得 DOM 元素
+  const elements = this.map((item) => item.el); // 取得 DOM 元素
 
   for (let i = 0; i < elements.length; i++) {
-
     // 處理前面的兄弟元素
     let p = elements[i].previousSibling;
     while (p) {
-      if (p.nodeType === 1 && !elements.includes(p)) siblings.push(new ZekiElement(p));
+      if (p.nodeType === 1 && !elements.includes(p))
+        siblings.push(new ZekiElement(p));
       p = p.previousSibling;
     }
 
     // 處理後面的兄弟元素
     let n = elements[i].nextSibling;
     while (n) {
-      if (n.nodeType === 1 && !elements.includes(n)) siblings.push(new ZekiElement(n));
+      if (n.nodeType === 1 && !elements.includes(n))
+        siblings.push(new ZekiElement(n));
       n = n.nextSibling;
     }
   }
@@ -60,11 +68,19 @@ function siblings() {
   return new ZekiCollection(siblings);
 }
 
-function length() {
+/**
+ * 取得當前類陣列的長度
+ * @returns {number} - 返回當前類陣列的長度
+ */
+export function length() {
   return this.length;
 }
 
-function values() {
+/**
+ * 取得當前類陣列的迭代器
+ * @returns {object} - 返回當前類陣列的迭代器
+ */
+export function values() {
   let index = 0;
   const self = this;
   return {
@@ -75,41 +91,3 @@ function values() {
     },
   };
 }
-
-Object.defineProperties(ZekiCollection.prototype, {
-  addClass: {
-    value: addClass,
-    writable: true,
-    enumerable: true,
-    configurable: false,
-  },
-  delClass: {
-    value: delClass,
-    writable: false,
-    enumerable: true,
-    configurable: false,
-  },
-  siblings: {
-    value: siblings,
-    writable: false,
-    enumerable: true,
-    configurable: false,
-  },
-  length: {
-    get: length,
-    enumerable: true,
-    configurable: false,
-  },
-  [Symbol.iterator]: {
-    value: values,
-    writable: false,
-    enumerable: false,
-    configurable: false,
-  },
-  [Symbol.toStringTag]: {
-    value: "ZekiCollection",
-    enumerable: false,
-    writable: false,
-    configurable: false,
-  },
-});
