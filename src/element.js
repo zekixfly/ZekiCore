@@ -69,12 +69,21 @@ export class ZekiElement {
   }
 
   /**
+   * remove element
+   * @returns {ZekiElement} - 返回當前的 ZekiElement 實例
+   */
+  remove() {
+    this.el.remove();
+    return this;
+  }
+
+  /**
    * append Child
    * @param {*} child - DOM 元素或 ZekiElement 實例
    * @returns {ZekiElement} - 返回當前的 ZekiElement 實例
    */
   addKid(child) {
-    child?.el && (child = child.el);
+    child instanceof ZekiElement && (child = child.el);
     this.el.appendChild(child);
     return this;
   }
@@ -86,7 +95,7 @@ export class ZekiElement {
    */
   addKids(...children) {
     children.forEach((child) => {
-      child?.el && (child = child.el);
+      child instanceof ZekiElement && (child = child.el);
       this.el.appendChild(child);
     });
     return this;
@@ -98,7 +107,7 @@ export class ZekiElement {
    * @returns {ZekiElement} - 返回當前的 ZekiElement 實例
    */
   delKid(child) {
-    child?.el && (child = child.el);
+    child instanceof ZekiElement && (child = child.el);
     this.el.removeChild(child);
     return this;
   }
@@ -110,7 +119,7 @@ export class ZekiElement {
    */
   delKids(children) {
     children.forEach((child) => {
-      child?.el && (child = child.el);
+      child instanceof ZekiElement && (child = child.el);
       this.el.removeChild(child);
     });
     return this;
@@ -123,8 +132,8 @@ export class ZekiElement {
    * @returns {ZekiElement} - 返回當前的 ZekiElement 實例
    */
   before(newNode, referenceNode) {
-    newNode?.el && (newNode = newNode.el);
-    referenceNode?.el && (referenceNode = referenceNode.el);
+    newNode instanceof ZekiElement && (newNode = newNode.el);
+    referenceNode instanceof ZekiElement && (referenceNode = referenceNode.el);
     this.el.insertBefore(newNode, referenceNode);
     return this;
   }
@@ -150,8 +159,10 @@ export class ZekiElement {
   }
 
   /**
-   * getId('id').siblings().delClass('style').addClass('style2');
+   * 獲取當前元素的兄弟元素集合
    * @returns {ZekiCollection} - 返回當前元素的兄弟元素集合
+   * @example const siblings = getId('id').siblings(); // 取得除了 id 自己以外的兄弟元素集合
+   * @example getId('id').siblings().delClass('style1').addClass('style2'); // 將取得的兄弟元素們刪除 style1 類名並添加 style2 類名
    */
   siblings() {
     const siblings = [];
@@ -211,6 +222,15 @@ export class ZekiElement {
   off(eventType, handler) {
     if (typeof handler !== "function") return;
     this.el.removeEventListener(eventType, handler);
+    return this;
+  }
+
+  /**
+   * 元素點擊事件
+   * @returns {ZekiElement} - 返回當前元素的父元素
+   */
+  click() {
+    this.el.click();
     return this;
   }
 
@@ -322,6 +342,96 @@ export class ZekiElement {
     return this;
   }
 
+  /**
+   * 獲取元素的 type 屬性
+   * @returns {string} - 返回當前元素的 type 屬性值
+   */
+  get type() {
+    return this.el.type;
+  }
+
+  /**
+   * 設置元素的 type 屬性
+   * @param {string} type - 要設置的 type 屬性值
+   * @returns {ZekiElement} - 返回當前的 ZekiElement 實例
+   */
+  set type(type) {
+    this.el.type = type;
+    return this;
+  }
+
+  /**
+   * 獲取元素的 name 屬性
+   * @returns {string} - 返回當前元素的 name 屬性值
+   */
+  get src() {
+    return this.el.src;
+  }
+
+  /**
+   * 設置元素的 src 屬性
+   * @param {string} src - 要設置的 src 屬性值
+   * @returns {ZekiElement} - 返回當前的 ZekiElement 實例
+   */
+  set src(src) {
+    this.el.src = src;
+    return this;
+  }
+
+  /**
+   * 獲取元素的 scrollTop 屬性
+   * @returns {number} - 返回當前元素的 scrollTop 屬性值
+   */
+  get scrollTop() {
+    return this.el.scrollTop;
+  }
+
+  /**
+   * 設置元素的 scrollTop 屬性
+   * @param {number} scrollTop - 要設置的 scrollTop 屬性值
+   * @returns {ZekiElement} - 返回當前的 ZekiElement 實例
+   */
+  set scrollTop(scrollTop) {
+    this.el.scrollTop = scrollTop;
+    return this;
+  }
+
+  /**
+   * 獲取元素的 onload 事件處理函數
+   * @returns {function} - 返回當前元素的 onload 事件處理函數
+   */
+  get onload() {
+    return this.el.onload;
+  }
+
+  /**
+   * 設置元素的 onload 事件處理函數
+   * @param {function} fn - 要設置的事件處理函數
+   * @returns {ZekiElement} - 返回當前的 ZekiElement 實例
+   */
+  set onload(fn) {
+    this.el.onload = fn;
+    return this;
+  }
+
+  /**
+   * 獲取元素的 onerror 事件處理函數
+   * @returns {function} - 返回當前元素的 onerror 事件處理函數
+   */
+  get onerror() {
+    return this.el.onerror;
+  }
+
+  /**
+   * 設置元素的 onerror 事件處理函數
+   * @param {function} fn - 要設置的事件處理函數
+   * @returns {ZekiElement} - 返回當前的 ZekiElement 實例
+   */
+  set onerror (fn) {
+    this.el.onerror = fn;
+    return this;
+  }
+  
   /**
    * 獲取元素的 childNodes
    * @returns {NodeList} - 返回當前元素的子節點集合

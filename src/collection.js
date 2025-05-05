@@ -31,8 +31,10 @@ export function delClass(className) {
 }
 
 /**
- * 取得當前類陣列的兄弟元素集合
+ * 取得當前類陣列元素的兄弟元素集合
  * @returns {ZekiCollection} - 返回當前類陣列元素之外的兄弟元素集合
+ * @example const siblings = getIds('id1', 'id2').siblings(); // 取得除了 id1 和 id2 以外的兄弟元素集合
+ * @example getIds('id1', 'id2').siblings().delClass('style1').addClass('style2'); // 將取得的兄弟元素們刪除 style1 類名並添加 style2 類名
  */
 export function siblings() {
   const siblings = [];

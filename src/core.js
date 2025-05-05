@@ -1,6 +1,7 @@
-import { one, all, getId, getIds, getTag, getClass } from "./dom-select.js";
+import { toZeki, one, all, getId, getIds, getTag, getClass } from "./dom-select.js";
 import { makeTag, makeText } from "./dom-create.js";
 import { importJS, loadZekiImports } from "./loader.js";
+import { on, off, bindEvent } from "./event.js";
 import { setDebug, log } from "./debug.js";
 import { addClass, delClass, siblings, length, values } from "./collection.js";
 
@@ -15,6 +16,12 @@ export const ZekiCore = {};
  * @type {Object}
  */
 Object.defineProperties(ZekiCore, {
+  toZeki: {
+    value: toZeki,
+    enumerable: false,
+    writable: false,
+    configurable: false,
+  },
   one: {
     value: one,
     enumerable: false,
@@ -71,6 +78,24 @@ Object.defineProperties(ZekiCore, {
   },
   loadZekiImports: {
     value: loadZekiImports,
+    enumerable: false,
+    writable: false,
+    configurable: false,
+  },
+  on: {
+    value: on,
+    enumerable: false,
+    writable: false,
+    configurable: false,
+  },
+  off: {
+    value: off,
+    enumerable: false,
+    writable: false,
+    configurable: false,
+  },
+  bindEvent: {
+    value: bindEvent,
     enumerable: false,
     writable: false,
     configurable: false,
