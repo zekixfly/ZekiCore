@@ -29,6 +29,17 @@ export class ZekiElement {
   }
 
   /**
+   * 獲取元素的計算樣式
+   * @param {string} prop - CSS 屬性名稱
+   * @returns {CSSStyleDeclaration} - 返回元素的計算樣式
+   * @example zk.getId('id').getStyle('color'); // 獲取 id 元素的顏色
+   * @example zk.getId('id').getStyle(); // 獲取 id 元素的所有計算樣式
+   */
+  getStyle(prop = null) {
+    return prop ? getComputedStyle(this.el)[prop] : getComputedStyle(this.el);
+  }
+  
+  /**
    * get attribute
    * @param {string} attr - DOM 元素屬性名稱
    * @returns {string} - 對應的 DOM 元素屬性值
@@ -161,8 +172,8 @@ export class ZekiElement {
   /**
    * 獲取當前元素的兄弟元素集合
    * @returns {ZekiCollection} - 返回當前元素的兄弟元素集合
-   * @example const siblings = getId('id').siblings(); // 取得除了 id 自己以外的兄弟元素集合
-   * @example getId('id').siblings().delClass('style1').addClass('style2'); // 將取得的兄弟元素們刪除 style1 類名並添加 style2 類名
+   * @example const siblings = zk.getId('id').siblings(); // 取得除了 id 自己以外的兄弟元素集合
+   * @example zk.getId('id').siblings().delClass('style1').addClass('style2'); // 將取得的兄弟元素們刪除 style1 類名並添加 style2 類名
    */
   siblings() {
     const siblings = [];
