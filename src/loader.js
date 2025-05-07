@@ -6,24 +6,25 @@ export function importJS(jsArray) {
     scriptTag.async = false;
     scriptTag.type = "text/javascript";
     scriptTag.src = jsArray[i];
+    scriptTag.onerror = () => {
+      console.error(`Failed to load script: ${scriptTag.src}`);
+    };
     document.head.appendChild(scriptTag);
   }
 }
 
 export function loadZekiImports() {
-  const scripts = document.querySelectorAll('script[src*="ZekiCore"][import]');
-  for (const script of scripts) {
-    const ImportSrc = script.getAttribute("import").trim();
-    if (ImportSrc) {
-      const importTag = document.createElement("script");
-      importTag.async = false;
-      importTag.type = "text/javascript";
-      importTag.src = `scripts/${ImportSrc}.js`;
-      importTag.onerror = () => {
-        console.error(`Failed to load script: ${importTag.src}`);
-      };
-      document.head.appendChild(importTag);
-      script.removeAttribute("import");
-    }
+  const ZekiScript = document.querySelector('script[src*="ZekiCore"][import]');
+  const ImportSrc = ZekiScript.getAttribute("import").trim();
+  if (ImportSrc) {
+    const importTag = document.createElement("script");
+    importTag.async = false;
+    importTag.type = "text/javascript";
+    importTag.src = ZekiScript.attributes.src.value.split('/').fill(ImportSrc, -1).join('/') + (ImportSrc.includes('.js') ? '' : '.js');
+    importTag.onerror = () => {
+      console.error(`Failed to load script: ${importTag.src}`);
+    };
+    document.head.appendChild(importTag);
+    ZekiScript.removeAttribute("import");
   }
 }
