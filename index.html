@@ -10,9 +10,11 @@
   <body>
     <div id="root" msg="Hello Tag!!">
       <div id="hwBtn">Button</div>
-      <nav></nav>
+      <nav>{{ myNav }}</nav>
+
       <div class="hwDiv">Hello DIV1</div>
-      <div class="hwDiv">Hello DIV2
+      <div class="hwDiv">
+        Hello DIV2
         <div>It's a div1</div>
         <div>It's a div2</div>
         <div>It's a div3</div>
@@ -31,11 +33,12 @@
       zk.setDebug(true);
       zk.log("Hello Zeki!");
       const el = zk.getId("root").getAttr("msg");
+      zk.getId("root").dataBind({ myNav: "Hello nav!" });
       zk.log(el);
       const handler = function () {
         zk.log("Hello Zeki! Button Clicked!");
       };
-      zk.getId('hwBtn').on('click', handler);
+      zk.getId("hwBtn").on("click", handler);
       // zk.getId('hwBtn').off('click', handler);
     </script>
   </body>

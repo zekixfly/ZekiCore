@@ -192,22 +192,22 @@ export class ZekiElement {
   }
 
   /**
-   *
-   * @param {*} param0
+   * 
+   * @param {object} data - 要綁定的數據物件
    * @returns {ZekiElement} - 返回當前的 ZekiElement 實例
+   * @example zk.getId('id').dataBind({ name: 'John', age: 30 }); // 將 id 元素的內容綁定到數據對象上
    */
-  dataBind({ data = {} } = {}) {
-    const nodes = this.el.querySelectorAll("*");
-    nodes.forEach((node) => {
-      const zText = node.getAttribute("z-text");
-      const zHtml = node.getAttribute("z-html");
-      if (zText && data[zText] !== undefined) {
-        node.innerText = data[zText];
+  dataBind( data  = {}) {
+    if (typeof data !== "object") throw new Error("dataBind: data must be an object.");
+    const htmlTmp = this.el.innerHTML.replace(/\{\{(.*?)\}\}/g, (_, key) => {
+      const keys = key.split('.').map((k) => k.trim());
+      let value = data;
+      for (const k of keys) {        
+        value = value[k];
       }
-      if (zHtml && data[zHtml] !== undefined) {
-        node.innerHTML = data[zHtml];
-      }
+      return value !== undefined ? value : `{{${key}}}`;
     });
+    this.el.innerHTML = htmlTmp;
     return this;
   }
 
