@@ -1,4 +1,4 @@
-import { toZeki, one, all, getId, getIds, getTag, getClass } from "./dom-select.js";
+import { toZekiEl, one, all, getId, getIds, getTag, getClass } from "./dom-select.js";
 import { makeTag, makeText } from "./dom-create.js";
 import { importJS, loadZekiImports } from "./loader.js";
 import { on, off, bindEvent } from "./event.js";
@@ -16,8 +16,8 @@ export const ZekiCore = {};
  * @type {Object}
  */
 Object.defineProperties(ZekiCore, {
-  toZeki: {
-    value: toZeki,
+  toZekiEl: {
+    value: toZekiEl,
     enumerable: false,
     writable: false,
     configurable: false,

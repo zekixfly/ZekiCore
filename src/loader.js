@@ -14,8 +14,8 @@ export function importJS(jsArray) {
 }
 
 export function loadZekiImports() {
-  const ZekiScript = document.querySelector('script[src*="ZekiCore"][import]');
-  const ImportSrc = ZekiScript.getAttribute("import").trim();
+  const ZekiScript = document.querySelector('script[src*="ZekiCore"]');
+  const ImportSrc = ZekiScript?.getAttribute("import")?.trim();
   if (ImportSrc) {
     const importTag = document.createElement("script");
     importTag.async = false;
