@@ -197,17 +197,53 @@ export class ZekiElement {
    * @returns {ZekiElement} - 返回當前的 ZekiElement 實例
    * @example zk.getId('id').dataBind({ name: 'John', age: 30 }); // 將 id 元素的內容綁定到數據對象上
    */
-  dataBind( data  = {}) {
-    if (typeof data !== "object") throw new Error("dataBind: data must be an object.");
-    const htmlTmp = this.el.innerHTML.replace(/\{\{(.*?)\}\}/g, (_, key) => {
-      const keys = key.split('.').map((k) => k.trim());
-      let value = data;
-      for (const k of keys) {        
-        value = value[k];
+  dataBind( data = {}) {
+    if (Array.isArray(data) || typeof data !== "object") throw new Error("dataBind: data must be an object.");
+    Object.keys(data).forEach(dataKey => {
+      if (Array.isArray(data[dataKey])) {
+        const nodeList = this.el.querySelectorAll('[z-for]');
+        const zForArr = Array.from(nodeList).map(item => item.getAttribute('z-for').trim().replace(/\s+/g, ' ').split(' '));
+        for(let zIdx = 0; zIdx < zForArr.length; zIdx++) {
+          const [itemName, middleName, objName] = zForArr[zIdx];
+          if(dataKey === objName) {
+            if(data[objName] && middleName == 'of') {
+              nodeList[zIdx].innerHTML = data[objName].map(item => 
+                nodeList[zIdx].innerHTML.replace(/\{\{(.*?)\}\}/g, (_, key) => {
+                  const keys = key.split('.').map(k => k.trim());
+                  if(keys[0] !== itemName) return `{{${key}}}`;
+                  let value = {[itemName]: item};
+                  for (const k of keys) {
+                    value = value[k];
+                  }
+                  return value !== undefined ? value : `{{${key}}}`;
+                })
+              ).join('');
+            } else if(data[objName] && middleName == 'in') {
+              nodeList[zIdx].innerHTML = data[objName].map((item, i) => 
+                nodeList[zIdx].innerHTML.replace(/\{\{(.*?)\}\}/g, (_, key) => {
+                  const keys = key.split('.').map(k => k.trim());
+                  if(keys[0] !== `${objName}[${itemName}]`) return `{{${key}}}`;
+                  let value = data[objName][i];
+                  for(let j = 1; j < keys.length; j++) {
+                    value = value[keys[j]];
+                  }
+                  return value !== undefined ? value : `{{${key}}}`;
+                })
+              ).join('');
+            }
+          }
+        }
+      } else if (typeof data[dataKey] === "string" || typeof data[dataKey] === "object") {
+        this.el.innerHTML = this.el.innerHTML.replace(/\{\{(.*?)\}\}/g, (_, key) => {
+          const keys = key.split('.').map((k) => k.trim());
+          let value = data;
+          for (const k of keys) {
+            value = value?.[k];
+          }
+          return value !== undefined ? value : `{{${key}}}`;
+        });
       }
-      return value !== undefined ? value : `{{${key}}}`;
-    });
-    this.el.innerHTML = htmlTmp;
+    })
     return this;
   }
 
