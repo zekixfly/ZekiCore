@@ -208,10 +208,7 @@ export class ZekiElement {
     zForList.forEach(node => {
       const [itemKey, keyword, listKey] = node.getAttribute('z-for').trim().replace(/\s+/g, ' ').split(' ');
       const list = data[listKey];
-      if (!Array.isArray(list)) {
-        console.warn(`dataBind: '${listKey}' is not an array.`);
-        return;
-      }
+      if (!Array.isArray(list)) return;
   
       const originalHTML = node.innerHTML;
       let renderedHTML = '';
