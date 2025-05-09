@@ -1,5 +1,6 @@
 // src/element.js
 import { ZekiCollection } from "./core.js";
+import { renderTemplate } from "./template.js";
 
 export class ZekiElement {
   constructor(el) {
@@ -195,55 +196,46 @@ export class ZekiElement {
    * 
    * @param {object} data - 要綁定的數據物件
    * @returns {ZekiElement} - 返回當前的 ZekiElement 實例
-   * @example zk.getId('id').dataBind({ name: 'John', age: 30 }); // 將 id 元素的內容綁定到數據對象上
+   * @example zk.getId('id').dataBind({ name: 'John', age: 30 }); // 將 id 元素的內容綁定到數據物件上
    */
-  dataBind( data = {}) {
-    if (Array.isArray(data) || typeof data !== "object") throw new Error("dataBind: data must be an object.");
-    Object.keys(data).forEach(dataKey => {
-      if (Array.isArray(data[dataKey])) {
-        const nodeList = this.el.querySelectorAll('[z-for]');
-        const zForArr = Array.from(nodeList).map(item => item.getAttribute('z-for').trim().replace(/\s+/g, ' ').split(' '));
-        for(let zIdx = 0; zIdx < zForArr.length; zIdx++) {
-          const [itemName, middleName, objName] = zForArr[zIdx];
-          if(dataKey === objName) {
-            if(data[objName] && middleName == 'of') {
-              nodeList[zIdx].innerHTML = data[objName].map(item => 
-                nodeList[zIdx].innerHTML.replace(/\{\{(.*?)\}\}/g, (_, key) => {
-                  const keys = key.split('.').map(k => k.trim());
-                  if(keys[0] !== itemName) return `{{${key}}}`;
-                  let value = {[itemName]: item};
-                  for (const k of keys) {
-                    value = value[k];
-                  }
-                  return value !== undefined ? value : `{{${key}}}`;
-                })
-              ).join('');
-            } else if(data[objName] && middleName == 'in') {
-              nodeList[zIdx].innerHTML = data[objName].map((item, i) => 
-                nodeList[zIdx].innerHTML.replace(/\{\{(.*?)\}\}/g, (_, key) => {
-                  const keys = key.split('.').map(k => k.trim());
-                  if(keys[0] !== `${objName}[${itemName}]`) return `{{${key}}}`;
-                  let value = data[objName][i];
-                  for(let j = 1; j < keys.length; j++) {
-                    value = value[keys[j]];
-                  }
-                  return value !== undefined ? value : `{{${key}}}`;
-                })
-              ).join('');
-            }
-          }
-        }
-      } else if (typeof data[dataKey] === "string" || typeof data[dataKey] === "object") {
-        this.el.innerHTML = this.el.innerHTML.replace(/\{\{(.*?)\}\}/g, (_, key) => {
-          const keys = key.split('.').map((k) => k.trim());
-          let value = data;
-          for (const k of keys) {
-            value = value?.[k];
-          }
-          return value !== undefined ? value : `{{${key}}}`;
-        });
+  dataBind(data = {}) {
+    if (Array.isArray(data) || typeof data !== "object") {
+      throw new Error("dataBind: data must be an object.");
+    }
+  
+    // 處理 z-for 節點
+    const zForList = Array.from(this.el.querySelectorAll('[z-for]')).reverse();
+    zForList.forEach(node => {
+      const [itemKey, keyword, listKey] = node.getAttribute('z-for').trim().replace(/\s+/g, ' ').split(' ');
+      const list = data[listKey];
+      if (!Array.isArray(list)) {
+        console.warn(`dataBind: '${listKey}' is not an array.`);
+        return;
       }
-    })
+  
+      const originalHTML = node.innerHTML;
+      let renderedHTML = '';
+  
+      if (keyword === 'of') {
+        renderedHTML = list.map(item =>
+          renderTemplate(originalHTML, { [itemKey]: item })
+        ).join('');
+      } else if (keyword === 'in') {
+        renderedHTML = list.map((item, idx) =>
+          renderTemplate(originalHTML, {
+            [itemKey]: idx,
+            [listKey]: {[idx]: list[idx]},
+          })
+        ).join('');
+      }
+  
+      node.removeAttribute('z-for');
+      node.innerHTML = renderedHTML;
+    });
+  
+    // 處理非 z-for 區塊的變數替換
+    this.el.innerHTML = renderTemplate(this.el.innerHTML, data);
+
     return this;
   }
 
