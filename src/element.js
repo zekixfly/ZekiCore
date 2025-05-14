@@ -470,10 +470,12 @@ export class ZekiElement {
   
   /**
    * 獲取元素的 childNodes
-   * @returns {NodeList} - 返回當前元素的子節點集合
+   * @returns {ZekiCollection} - 返回當前元素的子節點集合
    */
   get kidNodes() {
-    return this.el.childNodes;
+    const nodeList = this.el.childNodes;
+    const elements = Array.from(nodeList).filter(el => el.nodeType === 1).map(el => new ZekiElement(el));
+    return new ZekiCollection(elements);
   }
   /**
    * 獲取元素的 firstChild
