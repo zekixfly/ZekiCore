@@ -23,6 +23,28 @@ export function off(eventType, handler) {
   return this;
 }
 
+/**
+ * 綁定事件函式，並動態命名函式名稱以便於事件監聽。
+ * @param {Function} fn - 要綁定的原始函式。
+ * @param {string} [customEventName] - 自定義的事件名稱，若未提供則使用原函式的名稱。
+ * @returns {void} 如果無法在全域物件中找到傳入的函式，則會顯示警告並返回。
+ * @example
+ * // 假設有一個全域函式 myFunction
+ * function myFunction() {
+ *   console.log("執行 myFunction");
+ * }
+ * 
+ * // 綁定事件並指定自定義事件名稱
+ * bindEvent(myFunction, "customEvent");
+ * 
+ * // 監聽自定義事件
+ * window.addEventListener("customEvent", (event) => {
+ *   console.log("觸發自定義事件 customEvent", event.arguments);
+ * });
+ * 
+ * // 呼叫原始函式，會同時觸發自定義事件
+ * myFunction();
+ */
 export function bindEvent(fn, customEventName) {
   // 找尋原物件、原函式及函式名稱。
   const objsArr = [frames,location,console,history,document,navigator,screen,window];
@@ -31,7 +53,7 @@ export function bindEvent(fn, customEventName) {
 
   for ( const obj of objsArr ) {
     for ( const key in obj ) {
-      if(obj[key] === fn) { //此this為指向目前使用bindEvent此方法的函式。
+      if(obj[key] === fn) {
         functionName = customEventName || key; //若有傳入customEventName則使用，否則使用原本的key名稱。
         origObject = obj;
         break;
@@ -44,8 +66,6 @@ export function bindEvent(fn, customEventName) {
     console.warn("ZekiCore.bindEvent: 無法在全域物件中找到傳入的函式");
     return;
   }
-
-  
 
   // 動態命名function名稱，使得addEventLister可以使用該函式的name來監聽。
   // 解析：{[key]:value}為動態載入傳入的key名稱，

@@ -1,6 +1,5 @@
 // src/dom-create.js
-
-import { ZekiElement } from "./element.js";
+import { ZekiElement } from "./core.js";
 
 /**
  * create elements by tag name.

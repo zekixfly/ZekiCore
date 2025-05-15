@@ -1,14 +1,42 @@
 // src/collection.js
-import { ZekiElement } from "./element.js";
-import { ZekiCollection } from "./core.js";
+import { ZekiElement, ZekiCollection } from "./core.js";
+
+/** 
+ * 設置 DOM 元素的 attribute
+ * @param {string} key - DOM 元素屬性名稱
+ * @param {string} val - DOM 元素屬性值
+ * @returns {ZekiCollection} - 返回當前的 ZekiCollection 實例
+ */
+export function setAttr(key, val) {
+  this.forEach(item =>
+    item instanceof ZekiElement
+      ? item.el.setAttribute(key, val)
+      : item.setAttribute(key, val)
+  );
+  return this; // 支援鏈式呼叫
+}
+
+/**
+ * 刪除 DOM 元素裡的 attribute 
+ * @param {string} key - DOM 元素屬性名稱
+ * @returns {ZekiCollection} - 返回當前的 ZekiCollection 實例
+ */
+export function delAttr(key) {
+  this.forEach(item =>
+    item instanceof ZekiElement
+      ? item.el.removeAttribute(key)
+      : item.removeAttribute(key)
+  );
+  return this; // 支援鏈式呼叫
+}
 
 /**
  * 新增 class 名稱到 DOM 元素
  * @param {string} className - 要新增的 class 名稱
- * @returns {ZekiCollection} - 對應的 DOM 元素集合
+ * @returns {ZekiCollection} - 返回當前的 ZekiCollection 實例
  */
 export function addClass(className) {
-  this.forEach((item) =>
+  this.forEach(item =>
     item instanceof ZekiElement
       ? item.el.classList.add(className)
       : item.classList.add(className)
@@ -19,14 +47,44 @@ export function addClass(className) {
 /**
  * 刪除 DOM 元素的 class 名稱
  * @param {string} className - 要刪除的 class 名稱
- * @returns {ZekiCollection} - 對應的 DOM 元素集合
+ * @returns {ZekiCollection} - 返回當前的 ZekiCollection 實例
  */
 export function delClass(className) {
-  this.forEach((item) =>
+  this.forEach(item =>
     item instanceof ZekiElement
       ? item.el.classList.remove(className)
       : item.classList.remove(className)
   );
+  return this; // 支援鏈式呼叫
+}
+
+/**
+ * batch append Child
+ * @param {*} child - DOM 元素或 ZekiElement 實例
+ * @returns {ZekiCollection} - 返回當前的 ZekiCollection 實例
+ */
+export function addKid(child) {
+  child instanceof ZekiElement && (child = child.el);
+  this.forEach(item => {
+    let deepCloneNode = child.cloneNode(true);
+    item instanceof ZekiElement
+      ? item.el.appendChild(deepCloneNode)
+      : item.appendChild(deepCloneNode)
+  });
+  return this; // 支援鏈式呼叫
+}
+
+/**
+ * remove elements
+ * @param {*} child - DOM 元素或 ZekiElement 實例
+ * @returns {ZekiCollection} - 返回當前的 ZekiCollection 實例
+ */
+export function remove() {
+  this.forEach(item => {
+    item instanceof ZekiElement
+      ? item.el.remove()
+      : item.remove()
+  });
   return this; // 支援鏈式呼叫
 }
 
