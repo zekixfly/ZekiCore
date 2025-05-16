@@ -1,4 +1,4 @@
-import { ZekiCore } from './core.js';
+import { loadZekiImports } from './loader.js'
 export function initializeZekiCore() {
   // 顯示版權聲明
   const crz = "Copyright Zone";
@@ -22,5 +22,5 @@ export function initializeZekiCore() {
   document.onselectstart = () => false; // disable select
 
   // DOM 完成後載入 ZekiCore imports
-  document.addEventListener("DOMContentLoaded", ZekiCore.loadZekiImports); // load ZekiCore.js imports
+  document.addEventListener("DOMContentLoaded", loadZekiImports); // load ZekiCore.js imports
 }

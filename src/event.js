@@ -54,7 +54,7 @@ export function bindEvent(fn, customEventName) {
   for ( const obj of objsArr ) {
     for ( const key in obj ) {
       if(obj[key] === fn) {
-        functionName = customEventName || key; //若有傳入customEventName則使用，否則使用原本的key名稱。
+        functionName = key;
         origObject = obj;
         break;
       }
@@ -73,7 +73,7 @@ export function bindEvent(fn, customEventName) {
   origObject[functionName] = ({[functionName]:function(){
     const result = origFunction.apply(origObject, arguments); // 原函數依然可以正常執行。
     const event = new Event(
-        functionName,  //此為監聽事件的關鍵字命名，
+      customEventName || functionName,  //此為監聽事件的關鍵字命名，若有傳入customEventName則使用，否則使用原本的functionName名稱。
         {
             bubbles: true, // bubbles值代表可否使用冒泡機制
             cancelable: true // cancelable則是代表可否使用stopPropagation()方法

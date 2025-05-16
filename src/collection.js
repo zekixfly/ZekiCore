@@ -129,6 +129,39 @@ export function siblings() {
 }
 
 /**
+ * 增加事件監聽器
+ * @param {string} eventType - 事件類型
+ * @param {function} handler - 事件處理函數
+ * @param {boolean} options - 是否使用捕獲模式
+ * @returns {ZekiCollection} - 返回當前的 ZekiCollection 實例
+ */
+export function on(eventType, handler, options = false) {
+  if (typeof handler !== "function") return;
+  this.forEach(item => {
+    item instanceof ZekiElement
+      ? item.el.addEventListener(eventType, handler, options)
+      : item.addEventListener(eventType, handler, options)
+  });
+  return this; // 支援鏈式呼叫
+}
+
+/**
+ * 移除事件監聽器
+ * @param {string} eventType - 事件類型
+ * @param {function} handler - 事件處理函數
+ * @returns {ZekiCollection} - 返回當前的 ZekiCollection 實例
+ */
+export function off(eventType, handler) {
+  if (typeof handler !== "function") return;
+  this.forEach(item => {
+    item instanceof ZekiElement
+      ? item.el.removeEventListener(eventType, handler)
+      : item.removeEventListener(eventType, handler)
+  });
+  return this; // 支援鏈式呼叫
+}
+
+/**
  * 取得當前類陣列的長度
  * @returns {number} - 返回當前類陣列的長度
  */

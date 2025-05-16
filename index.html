@@ -5,6 +5,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <style>
+      .highlight {
+        background-color: lightcyan;
+        color: #000;
+      }
+    </style>
     <script src="dist/ZekiCore.min.js"></script>
   </head>
   <body>
@@ -33,6 +39,7 @@
       zk.setDebug(true);
       zk.log("Hello Zeki!");
       const el = zk.getId("root").getAttr("msg");
+      zk.log(el);
 
       const items = [
         {
@@ -46,6 +53,7 @@
           content: `Hello, Here is real word.`,
         },
       ];
+
       const data = [
         {
           title: "data1",
@@ -61,12 +69,11 @@
 
       zk.getId("root").dataBind({ myNav: "Hello nav!", myObj: { a: 'I\'m the a.', b: 'I\'m the b.' } }).dataBind({ items }).dataBind({ data });
 
-      zk.log(el);
-      const handler = function () {
+
+      const zkHandler = function () {
         zk.log("Hello Zeki! Button Clicked!");
       };
-      zk.getId("hwBtn").on("click", handler);
-      // zk.getId('hwBtn').off('click', handler);
+      zk.getId("hwBtn").on("click", zkHandler);
     </script>
   </body>
 </html>
