@@ -230,9 +230,13 @@ export function dataBind(data = {}) {
     const list = data[listKey];
     if (!Array.isArray(list)) return;
 
-    const originalHTML = node.innerHTML;
-    let renderedHTML = "";
+    node.removeAttribute("z-for");
+    const zCloakList = Array.from(node.querySelectorAll("[z-cloak]"));
+    if(zCloakList.length > 0) zCloakList.forEach(item => item.removeAttribute("z-cloak"));
 
+    const originalHTML = node.outerHTML;
+    let renderedHTML = "";
+    
     if (keyword === "of") {
       renderedHTML = list
         .map((item) => renderTemplate(originalHTML, { [itemKey]: item }))
@@ -248,8 +252,8 @@ export function dataBind(data = {}) {
         .join("");
     }
 
-    node.removeAttribute("z-for");
-    node.innerHTML = renderedHTML;
+    node.parentElement.insertAdjacentHTML('beforeend', renderedHTML);
+    node.remove();
   });
 
   // 處理非 z-for 區塊的變數替換

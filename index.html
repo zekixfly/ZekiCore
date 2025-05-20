@@ -18,15 +18,15 @@
       <div id="hwBtn">Button</div>
       <nav>{{ myNav }}</nav> 
       <aside>{{ myObj['a'] }}<br/>{{ myObj.b }}</aside>
-      <section z-for="article of items">
-        <article>
+      <section>
+        <article z-for="article of items">
           <h1><label>標題:</label>{{ article.title }}</h1>
           <div><label>日期:</label>{{ article.date }}</div>
           <p><label>內容:</label>{{ article.content }}</p>
         </article>
       </section>
-      <section z-for="idx in data">
-        <article>
+      <section>
+        <article z-for="idx in data">
           <h1><label>標題:</label>{{ data[idx].title }}</h1>
           <div><label>日期:</label>{{ data[idx].date }}</div>
           <p><label>內容:</label>{{ data[idx].content }}</p>
