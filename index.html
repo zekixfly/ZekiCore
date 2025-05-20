@@ -10,27 +10,49 @@
         background-color: lightcyan;
         color: #000;
       }
+      section {
+        border: 1px dashed gray;
+        margin: 10px 0;
+      }
+      .desc {
+        padding: 5px;
+        background-color: gray;
+        color: white;
+        border-left: 5px solid black;
+      }
+      .desc::before {
+        content: '描述: '
+      }
+      [z-cloak] {
+        display: none;
+      }
     </style>
     <script src="dist/ZekiCore.min.js"></script>
   </head>
   <body>
     <div id="root" msg="Hello Tag!!">
       <div id="hwBtn">Button</div>
-      <nav>{{ myNav }}</nav> 
-      <aside>{{ myObj['a'] }}<br/>{{ myObj.b }}</aside>
+      <nav z-cloak>{{ myNav }}</nav> 
+      <aside z-cloak>{{ myObj['a'] }}<br/>{{ myObj.b }}</aside>
       <section>
         <article z-for="article of items">
-          <h1><label>標題:</label>{{ article.title }}</h1>
-          <div><label>日期:</label>{{ article.date }}</div>
-          <p><label>內容:</label>{{ article.content }}</p>
+          <h1 z-cloak><label>標題:</label>{{ article.title }}</h1>
+          <div z-cloak><label>日期:</label>{{ article.date }}</div>
+          <p z-cloak><label>內容:</label>{{ article.content }}</p>
         </article>
+        <div class="desc">
+          以上是for...of產生。
+        </div>
       </section>
       <section>
         <article z-for="idx in data">
-          <h1><label>標題:</label>{{ data[idx].title }}</h1>
-          <div><label>日期:</label>{{ data[idx].date }}</div>
-          <p><label>內容:</label>{{ data[idx].content }}</p>
+          <h1 z-cloak><label>標題:</label>{{ data[idx].title }}</h1>
+          <div z-cloak><label>日期:</label>{{ data[idx].date }}</div>
+          <p z-cloak><label>內容:</label>{{ data[idx].content }}</p>
         </article>
+        <div class="desc">
+          以上是for...in產生。
+        </div>
       </section>
 
       <footer></footer>

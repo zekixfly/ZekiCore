@@ -221,42 +221,51 @@ export function dataBind(data = {}) {
 
   // 處理 z-for 節點
   const zForList = Array.from(this.el.querySelectorAll("[z-for]")).reverse();
-  zForList.forEach((node) => {
-    const [itemKey, keyword, listKey] = node
-      .getAttribute("z-for")
-      .trim()
-      .replace(/\s+/g, " ")
-      .split(" ");
-    const list = data[listKey];
-    if (!Array.isArray(list)) return;
+  if(zForList.length > 0) {
+    zForList.forEach((node) => {
+      const [itemKey, keyword, listKey] = node
+        .getAttribute("z-for")
+        .trim()
+        .replace(/\s+/g, " ")
+        .split(" ");
+      const list = data[listKey];
+      if (!Array.isArray(list)) return;
 
-    node.removeAttribute("z-for");
-    const zCloakList = Array.from(node.querySelectorAll("[z-cloak]"));
-    if(zCloakList.length > 0) zCloakList.forEach(item => item.removeAttribute("z-cloak"));
+      node.removeAttribute("z-for");
+      const zForCloakList = Array.from(node.querySelectorAll("[z-cloak]"));
+      if(zForCloakList.length > 0) zForCloakList.forEach(item => item.removeAttribute("z-cloak"));
 
-    const originalHTML = node.outerHTML;
-    let renderedHTML = "";
-    
-    if (keyword === "of") {
-      renderedHTML = list
-        .map((item) => renderTemplate(originalHTML, { [itemKey]: item }))
-        .join("");
-    } else if (keyword === "in") {
-      renderedHTML = list
-        .map((item, idx) =>
-          renderTemplate(originalHTML, {
-            [itemKey]: idx,
-            [listKey]: { [idx]: list[idx] },
-          })
-        )
-        .join("");
-    }
-
-    node.parentElement.insertAdjacentHTML('beforeend', renderedHTML);
-    node.remove();
-  });
+      const originalHTML = node.outerHTML;
+      let renderedHTML = "";
+      
+      if (keyword === "of") {
+        renderedHTML = list
+          .map((item) => renderTemplate(originalHTML, { [itemKey]: item }))
+          .join("");
+      } else if (keyword === "in") {
+        renderedHTML = list
+          .map((item, idx) =>
+            renderTemplate(originalHTML, {
+              [itemKey]: idx,
+              [listKey]: { [idx]: list[idx] },
+            })
+          )
+          .join("");
+      }
+      /**
+       * 'beforebegin'：元素本身的前面。 
+       * 'afterbegin'：插入元素內部的第一個子節點之前。 
+       * 'beforeend'：插入元素內部的最後一個子節點之後。 
+       * 'afterend'：元素自身的後面。
+       */
+      node.insertAdjacentHTML('afterend', renderedHTML);
+      node.remove();
+    });
+  }
 
   // 處理非 z-for 區塊的變數替換
+  const zCloakList = Array.from(this.el.querySelectorAll("[z-cloak]"));
+  if(zCloakList.length > 0) zCloakList.forEach(item => item.removeAttribute("z-cloak"));
   this.el.innerHTML = renderTemplate(this.el.innerHTML, data);
 
   return this;
