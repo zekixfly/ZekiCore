@@ -61,7 +61,7 @@
         { path: "/about", template: "about.html" },
       ];
 
-      const router = zk.getId("root").routerBind({ mode: "hash", routes });
+      const router = zk.getId("root").routerBind({ mode: "history", routes });
       console.log("router", router);
     </script>
   </body>
