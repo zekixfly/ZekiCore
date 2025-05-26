@@ -1,0 +1,68 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My SPA Page Demo</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0 40px;
+      }
+      .highlight {
+        background-color: lightcyan;
+        color: #000;
+      }
+      section {
+        border: 1px dashed gray;
+        margin: 10px 0;
+      }
+      .desc {
+        padding: 5px;
+        background-color: gray;
+        color: white;
+        border-left: 5px solid black;
+      }
+      .desc::before {
+        content: "描述: ";
+      }
+      [z-cloak] {
+        display: none;
+      }
+    </style>
+    <script src="script/ZekiCore.min.js"></script>
+  </head>
+  <body>
+    <div>我是外部連結<a href="http://google.com" target="_blank">Google</a></div>
+    <div id="root" msg="Hello Tag!!">
+      <h1>前端路由實現 - Hash/History</h1>
+      <ul>
+        <li><a href="/home">home</a></li>
+        <li><a href="/blog">blog</a></li>
+        <li><a href="/about">about</a></li>
+      </ul>
+
+      <div id="router-outlet">index router</div>
+      <br />
+
+      <footer></footer>
+    </div>
+    <script>
+      zk.setDebug(true);
+      zk.log("Hello Zeki!");
+      const el = zk.getId("root").getAttr("msg");
+      zk.log(el);
+
+      const routes = [
+        { path: "/", template: "home.html" },
+        { path: "/home", template: "home.html" },
+        { path: "/blog", template: "blog.html" },
+        { path: "/about", template: "about.html" },
+      ];
+
+      const router = zk.getId("root").routerBind({ mode: "history", routes });
+      console.log("router", router);
+    </script>
+  </body>
+</html>

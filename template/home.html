@@ -1,0 +1,19 @@
+<template>
+  <nav z-cloak>{{ myNav }}</nav>
+  It's a home content.
+  <div>
+    Morning
+    <article>Welcome to the home page!</article>
+  </div>
+
+  <aside z-cloak>{{ myObj['a'] }}<br />{{ myObj.b }}</aside>
+</template>
+
+<script>
+  console.log("Home page script loaded.");
+
+  zk.getId("root").dataBind({
+    myNav: "Hello nav!",
+    myObj: { a: "I'm the a.", b: "I'm the b." },
+  });
+</script>

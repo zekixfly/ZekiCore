@@ -1,0 +1,12 @@
+<template>
+  It's a about content.
+  <button id="hwBtn">Button</button>
+</template>
+<script>
+  console.log("About page script loaded.");
+
+  const zkHandler = function () {
+    alert("Hello Zeki! Button Clicked!");
+  };
+  zk.getId("hwBtn").on("click", zkHandler);
+</script>
