@@ -1,6 +1,9 @@
 // src/element.js
 import { ZekiElement, ZekiCollection } from "./core.js";
+import { ZekiFragment } from "./fragment.js";
 import { renderTemplate } from "./template.js";
+import { HashRouter } from "./router/HashRouter.js";
+import { HistoryRouter } from "./router/HistoryRouter.js";
 
 /**
  * get element by selector.
@@ -9,7 +12,11 @@ import { renderTemplate } from "./template.js";
  */
 export function one(selector) {
   const el = this.el.querySelector(selector);
-  return el ? new ZekiElement(el) : null;
+  return el
+    ? el instanceof HTMLTemplateElement
+      ? new ZekiFragment(el)
+      : new ZekiElement(el)
+    : null;
 }
 
 /**
@@ -19,7 +26,11 @@ export function one(selector) {
  */
 export function all(selector) {
   const nodeList = this.el.querySelectorAll(selector);
-  const elements = Array.from(nodeList, el => new ZekiElement(el));
+  const elements = Array.from(nodeList, (el) =>
+    el instanceof HTMLTemplateElement
+      ? new ZekiFragment(el)
+      : new ZekiElement(el)
+  );
   return new ZekiCollection(elements);
 }
 
@@ -30,7 +41,11 @@ export function all(selector) {
  */
 export function getTag(tagName) {
   const htmlCollection = this.el.getElementsByTagName(tagName);
-  const elements = Array.from(htmlCollection, el => new ZekiElement(el));
+  const elements = Array.from(htmlCollection, (el) =>
+    el instanceof HTMLTemplateElement
+      ? new ZekiFragment(el)
+      : new ZekiElement(el)
+  );
   return new ZekiCollection(elements);
 }
 
@@ -41,7 +56,11 @@ export function getTag(tagName) {
  */
 export function getClass(className) {
   const htmlCollection = this.el.getElementsByClassName(className);
-  const elements = Array.from(htmlCollection, (el) => new ZekiElement(el));
+  const elements = Array.from(htmlCollection, (el) =>
+    el instanceof HTMLTemplateElement
+      ? new ZekiFragment(el)
+      : new ZekiElement(el)
+  );
   return new ZekiCollection(elements);
 }
 
@@ -221,7 +240,7 @@ export function dataBind(data = {}) {
 
   // 處理 z-for 節點
   const zForList = Array.from(this.el.querySelectorAll("[z-for]")).reverse();
-  if(zForList.length > 0) {
+  if (zForList.length > 0) {
     zForList.forEach((node) => {
       const [itemKey, keyword, listKey] = node
         .getAttribute("z-for")
@@ -233,42 +252,72 @@ export function dataBind(data = {}) {
 
       node.removeAttribute("z-for");
       const zForCloakList = Array.from(node.querySelectorAll("[z-cloak]"));
-      if(zForCloakList.length > 0) zForCloakList.forEach(item => item.removeAttribute("z-cloak"));
+      if (zForCloakList.length > 0)
+        zForCloakList.forEach((item) => item.removeAttribute("z-cloak"));
 
       const originalHTML = node.outerHTML;
       let renderedHTML = "";
-      
+
       if (keyword === "of") {
         renderedHTML = list
-          .map((item) => renderTemplate(originalHTML, { [itemKey]: item }))
+          .map(
+            (item) =>
+              renderTemplate(node.cloneNode(true), { [itemKey]: item })
+                .innerHTML
+          )
           .join("");
       } else if (keyword === "in") {
         renderedHTML = list
-          .map((item, idx) =>
-            renderTemplate(originalHTML, {
-              [itemKey]: idx,
-              [listKey]: { [idx]: list[idx] },
-            })
+          .map(
+            (item, idx) =>
+              renderTemplate(node.cloneNode(true), {
+                [itemKey]: idx,
+                [listKey]: { [idx]: list[idx] },
+              }).innerHTML
           )
           .join("");
       }
+
       /**
-       * 'beforebegin'：元素本身的前面。 
-       * 'afterbegin'：插入元素內部的第一個子節點之前。 
-       * 'beforeend'：插入元素內部的最後一個子節點之後。 
+       * 'beforebegin'：元素本身的前面。
+       * 'afterbegin'：插入元素內部的第一個子節點之前。
+       * 'beforeend'：插入元素內部的最後一個子節點之後。
        * 'afterend'：元素自身的後面。
        */
-      node.insertAdjacentHTML('afterend', renderedHTML);
+      node.insertAdjacentHTML("afterend", renderedHTML);
       node.remove();
     });
   }
 
   // 處理非 z-for 區塊的變數替換
   const zCloakList = Array.from(this.el.querySelectorAll("[z-cloak]"));
-  if(zCloakList.length > 0) zCloakList.forEach(item => item.removeAttribute("z-cloak"));
-  this.el.innerHTML = renderTemplate(this.el.innerHTML, data);
+  if (zCloakList.length > 0)
+    zCloakList.forEach((item) => item.removeAttribute("z-cloak"));
+  renderTemplate(this.el, data);
 
   return this;
+}
+
+/**
+ * 綁定路由到當前元素
+ * @param {object} options - 路由配置選項
+ * @returns {HashRouter|HistoryRouter} - 返回對應的路由實例
+ * @example zk.getId('id').routerBind({ mode: 'hash', routes: [{ path: '/', template: 'home.html' }] });
+ */
+export function routerBind({ mode = "hash", routes = [] }) {
+  if (!routes.length) console.warn("routes has not any data.");
+  let router;
+  switch (mode) {
+    case "hash":
+      router = new HashRouter(this.el, routes);
+      break;
+    case "history":
+      router = new HistoryRouter(this.el, routes);
+      break;
+    default:
+      break;
+  }
+  return router;
 }
 
 /**
@@ -501,6 +550,16 @@ export function getOnerror() {
 export function setOnerror(fn) {
   this.el.onerror = fn;
   return this;
+}
+
+/**
+ * 獲取元素的 children
+ * @returns {ZekiCollection} - 返回當前元素的子元素集合
+ */
+export function kids() {
+  const htmlCollection = this.el.children;
+  const elements = Array.from(htmlCollection, (el) => new ZekiElement(el));
+  return new ZekiCollection(elements);
 }
 
 /**

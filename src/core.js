@@ -1,13 +1,75 @@
 import { one, all, getId, getIds, getTag, getClass } from "./dom-select.js";
 import { makeTag, makeText } from "./dom-create.js";
-import { toZekiEl } from './dom-convert.js'
+import { toZekiEl } from "./dom-convert.js";
 import { importJS, loadZekiImports } from "./loader.js";
 import { on, off, bindEvent } from "./event.js";
 import { renderTemplate } from "./template.js";
-import { setDebug, log } from "./debug.js";
-import { one as elOne, all as elAll, getTag as elGetTag, getClass as elGetClass, getStyle, getAttr, setAttr, setAttrs, delAttr, remove, addKid, addKids, delKid, delKids, before, addClass, delClass, siblings, dataBind, on as elOn, off as elOff, click, getHTML, setHTML, getText, setText, getValue, setValue, getIdName, setIdName, getClassName, setClassName, getDisabled, setDisabled, getType, setType, getSRC, setSRC, getScrollTop, setScrollTop, getOnload, setOnload, getOnerror, setOnerror, kidNodes, firstKid, lastKid } from './element.js'
-import { setAttr as collSetAttr, delAttr as collDelAttr, addClass as collAddClass, delClass as collDelClass, addKid as collAddKid, remove as collRemove, siblings as collSiblings, on as collOn, off as collOff, length, values } from "./collection.js";
-import { version } from './version.js'
+import { setDebug, log, warn, error } from "./debug.js";
+import {
+  one as elOne,
+  all as elAll,
+  getTag as elGetTag,
+  getClass as elGetClass,
+  getStyle,
+  getAttr,
+  setAttr,
+  setAttrs,
+  delAttr,
+  remove,
+  addKid,
+  addKids,
+  delKid,
+  delKids,
+  before,
+  addClass,
+  delClass,
+  siblings,
+  dataBind,
+  routerBind,
+  on as elOn,
+  off as elOff,
+  click,
+  getHTML,
+  setHTML,
+  getText,
+  setText,
+  getValue,
+  setValue,
+  getIdName,
+  setIdName,
+  getClassName,
+  setClassName,
+  getDisabled,
+  setDisabled,
+  getType,
+  setType,
+  getSRC,
+  setSRC,
+  getScrollTop,
+  setScrollTop,
+  getOnload,
+  setOnload,
+  getOnerror,
+  setOnerror,
+  kids,
+  kidNodes,
+  firstKid,
+  lastKid,
+} from "./element.js";
+import {
+  setAttr as collSetAttr,
+  delAttr as collDelAttr,
+  addClass as collAddClass,
+  delClass as collDelClass,
+  addKid as collAddKid,
+  remove as collRemove,
+  siblings as collSiblings,
+  on as collOn,
+  off as collOff,
+  length,
+  values,
+} from "./collection.js";
+import { version } from "./version.js";
 
 /**
  * ZekiCore 命名空間
@@ -118,6 +180,18 @@ Object.defineProperties(ZekiCore, {
   },
   log: {
     value: log,
+    enumerable: true,
+    writable: false,
+    configurable: false,
+  },
+  warn: {
+    value: warn,
+    enumerable: true,
+    writable: false,
+    configurable: false,
+  },
+  error: {
+    value: error,
     enumerable: true,
     writable: false,
     configurable: false,
@@ -260,6 +334,12 @@ Object.defineProperties(ZekiElement.prototype, {
     enumerable: true,
     configurable: false,
   },
+  routerBind: {
+    value: routerBind,
+    writable: false,
+    enumerable: true,
+    configurable: false,
+  },
   on: {
     value: elOn,
     writable: false,
@@ -341,6 +421,11 @@ Object.defineProperties(ZekiElement.prototype, {
   onerror: {
     get: getOnerror,
     set: setOnerror,
+    enumerable: true,
+    configurable: false,
+  },
+  kids: {
+    get: kids,
     enumerable: true,
     configurable: false,
   },

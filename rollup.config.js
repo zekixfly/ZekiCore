@@ -9,7 +9,7 @@ export default defineConfig([
   // {
   //   input: "src/index.js",
   //   output: {
-  //     file: "dist/ZekiCore.js",
+  //     file: "dist/script/ZekiCore.js",
   //     format: "iife",
   //     name: "ZekiCore", // 全域變數名稱 window.ZekiCore
   //     sourcemap: false,
@@ -20,7 +20,7 @@ export default defineConfig([
   {
     input: "src/index.js",
     output: {
-      file: "dist/ZekiCore.min.js",
+      file: "dist/script/ZekiCore.min.js",
       format: "iife",
       name: "ZekiCore", // 全域變數名稱 window.ZekiCore
       sourcemap: false,
