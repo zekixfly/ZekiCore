@@ -1,6 +1,6 @@
 // src/element.js
 import { ZekiElement, ZekiCollection } from "./core.js";
-import { ZekiFragment } from "./fragment.js";
+// import { ZekiFragment } from "./fragment.js";
 import { renderTemplate } from "./template.js";
 import { HashRouter } from "./router/HashRouter.js";
 import { HistoryRouter } from "./router/HistoryRouter.js";
@@ -12,11 +12,7 @@ import { HistoryRouter } from "./router/HistoryRouter.js";
  */
 export function one(selector) {
   const el = this.el.querySelector(selector);
-  return el
-    ? el instanceof HTMLTemplateElement
-      ? new ZekiFragment(el)
-      : new ZekiElement(el)
-    : null;
+  return el ? new ZekiElement(el) : null;
 }
 
 /**
@@ -26,11 +22,7 @@ export function one(selector) {
  */
 export function all(selector) {
   const nodeList = this.el.querySelectorAll(selector);
-  const elements = Array.from(nodeList, (el) =>
-    el instanceof HTMLTemplateElement
-      ? new ZekiFragment(el)
-      : new ZekiElement(el)
-  );
+  const elements = Array.from(nodeList, (el) => new ZekiElement(el));
   return new ZekiCollection(elements);
 }
 
@@ -41,11 +33,7 @@ export function all(selector) {
  */
 export function getTag(tagName) {
   const htmlCollection = this.el.getElementsByTagName(tagName);
-  const elements = Array.from(htmlCollection, (el) =>
-    el instanceof HTMLTemplateElement
-      ? new ZekiFragment(el)
-      : new ZekiElement(el)
-  );
+  const elements = Array.from(htmlCollection, (el) => new ZekiElement(el));
   return new ZekiCollection(elements);
 }
 
@@ -56,11 +44,7 @@ export function getTag(tagName) {
  */
 export function getClass(className) {
   const htmlCollection = this.el.getElementsByClassName(className);
-  const elements = Array.from(htmlCollection, (el) =>
-    el instanceof HTMLTemplateElement
-      ? new ZekiFragment(el)
-      : new ZekiElement(el)
-  );
+  const elements = Array.from(htmlCollection, (el) => new ZekiElement(el));
   return new ZekiCollection(elements);
 }
 
@@ -255,25 +239,21 @@ export function dataBind(data = {}) {
       if (zForCloakList.length > 0)
         zForCloakList.forEach((item) => item.removeAttribute("z-cloak"));
 
-      const originalHTML = node.outerHTML;
       let renderedHTML = "";
 
       if (keyword === "of") {
         renderedHTML = list
-          .map(
-            (item) =>
-              renderTemplate(node.cloneNode(true), { [itemKey]: item })
-                .innerHTML
+          .map((item) =>
+            renderTemplate(node.cloneNode(true), { [itemKey]: item })
           )
           .join("");
       } else if (keyword === "in") {
         renderedHTML = list
-          .map(
-            (item, idx) =>
-              renderTemplate(node.cloneNode(true), {
-                [itemKey]: idx,
-                [listKey]: { [idx]: list[idx] },
-              }).innerHTML
+          .map((item, idx) =>
+            renderTemplate(node.cloneNode(true), {
+              [itemKey]: idx,
+              [listKey]: { [idx]: list[idx] },
+            })
           )
           .join("");
       }
