@@ -80,12 +80,12 @@ export function renderTemplate(rootEl, scope = {}) {
 
 /**
  * 從指定路徑加載 HTML 模板，並返回解析後的模板和腳本。
- * @param {string} path - 模板的路徑，通常是相對於 `template/` 目錄的路徑。
+ * @param {string} templateHTML - 模板的路徑，通常是相對於 `template/` 目錄的路徑。
  * @returns {Promise<{template: HTMLTemplateElement, script: HTMLScriptElement}>} 返回一個包含模板和腳本元素的 Promise。
  */
-export async function fetchTemplate(path) {
+export async function fetchTemplate(basePath, templateHTML) {
   const response = await fetch(
-    `template/${path.includes(".html") ? path : path + ".html"}`
+    `${location.origin + basePath}/template/${templateHTML.includes(".html") ? templateHTML : templateHTML + ".html"}`
   );
   const templateText = await response.text();
 

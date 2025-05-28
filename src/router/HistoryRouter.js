@@ -59,6 +59,14 @@ export class HistoryRouter {
       linkList.forEach((link) => {
         link.addEventListener("click", (e) => {
           e.preventDefault();
+          link.classList.add("active");
+          linkList.forEach(otherLink => {
+            if (otherLink !== link) {
+              otherLink.classList.remove("active");
+            }
+          })
+          // 如果是同一個路徑，則不處理
+          if (link.getAttribute("href") === location.pathname.split(this.basePath ? this.basePath : false).pop()) return;
           history.pushState(
             null,
             "",
@@ -80,6 +88,7 @@ export class HistoryRouter {
 
     try {
       const { template, script } = await fetchTemplate(
+        this.basePath,
         this.mapper[path].template
       );
       if (template) {
@@ -96,10 +105,9 @@ export class HistoryRouter {
           }
           this.outlet.appendChild(scriptTag);
         }
-        document.title = `${
-          this.pageTitle +
-          (path.split("/").pop() ? ` - ${path.split("/").pop()}` : "")
-        }`;
+        if (path.split("/").pop()) {
+          document.title = `${this.pageTitle} - ${path.split("/").pop()}`;
+        }
       }
     } catch (error) {
       zk.warn("HistoryRouter error:", error);

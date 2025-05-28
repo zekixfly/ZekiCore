@@ -42,6 +42,12 @@ export class HashRouter {
       linkList.forEach((link) => {
         link.addEventListener("click", async (e) => {
           e.preventDefault();
+          link.classList.add("active");
+          linkList.forEach(otherLink => {
+            if (otherLink !== link) {
+              otherLink.classList.remove("active");
+            }
+          })
           location.hash =
             link.getAttribute("href").charAt(0) === "/"
               ? link.getAttribute("href")
@@ -59,6 +65,7 @@ export class HashRouter {
 
     try {
       const { template, script } = await fetchTemplate(
+        this.basePath,
         this.mapper[path].template
       );
       if (template) {
@@ -75,10 +82,9 @@ export class HashRouter {
           }
           this.outlet.appendChild(scriptTag);
         }
-        document.title = `${
-          this.pageTitle +
-          (path.split("/").pop() ? ` - ${path.split("/").pop()}` : "")
-        }`;
+        if (path.split("/").pop()) {
+          document.title = `${this.pageTitle} - ${path.split("/").pop()}`;
+        }
       }
     } catch (error) {
       zk.warn("HashRouter error: ", error);
