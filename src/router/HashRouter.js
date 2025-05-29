@@ -42,12 +42,6 @@ export class HashRouter {
       linkList.forEach((link) => {
         link.addEventListener("click", async (e) => {
           e.preventDefault();
-          link.classList.add("active");
-          linkList.forEach(otherLink => {
-            if (otherLink !== link) {
-              otherLink.classList.remove("active");
-            }
-          })
           location.hash =
             link.getAttribute("href").charAt(0) === "/"
               ? link.getAttribute("href")
@@ -62,7 +56,15 @@ export class HashRouter {
     const hash = location.hash;
     const path = hash ? hash.substring(1) : "/";
     zk.log(`hash path: ${path}`);
-
+    
+    const activeLink = document.querySelector(`a[href="${path}"]`);
+    if (activeLink) activeLink.classList.add("active");
+    const linkList = this.el.querySelectorAll("a[href]");
+    linkList.forEach(otherLink => {
+      if (otherLink !== activeLink) {
+        otherLink.classList.remove("active");
+      }
+    })
     try {
       const { template, script } = await fetchTemplate(
         this.basePath,

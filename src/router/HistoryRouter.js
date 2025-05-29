@@ -41,11 +41,6 @@ export class HistoryRouter {
       const redirect = sessionStorage.redirect;
       delete sessionStorage.redirect;
       history.replaceState(null, "", redirect);
-      const realPath = redirect.startsWith(this.basePath)
-        ? redirect.slice(this.basePath.length) || "/" // 防止空字串
-        : redirect;
-      const activeLink = document.querySelector(`a[href="${realPath}"]`);
-      if (activeLink) activeLink.classList.add("active");
     }
 
     // check if the current path is empty or index for first load
@@ -64,12 +59,6 @@ export class HistoryRouter {
       linkList.forEach((link) => {
         link.addEventListener("click", (e) => {
           e.preventDefault();
-          link.classList.add("active");
-          linkList.forEach((otherLink) => {
-            if (otherLink !== link) {
-              otherLink.classList.remove("active");
-            }
-          });
           // 如果是同一個路徑，則不處理
           if (
             link.getAttribute("href") ===
@@ -91,14 +80,22 @@ export class HistoryRouter {
   }
 
   async change() {
-    let path = location.pathname;
-    path = path.split(this.basePath ? this.basePath : false).pop();
-    zk.log(`history path: ${path}`);
+    const path = location.pathname;
+    const realPath = path.split(this.basePath ? this.basePath : false).pop();
+    zk.log(`history path: ${realPath}`);
 
+    const activeLink = document.querySelector(`a[href="${realPath}"]`);
+    if (activeLink) activeLink.classList.add("active");
+    const linkList = this.el.querySelectorAll("a[href]");
+    linkList.forEach(otherLink => {
+      if (otherLink !== activeLink) {
+        otherLink.classList.remove("active");
+      }
+    })
     try {
       const { template, script } = await fetchTemplate(
         this.basePath,
-        this.mapper[path].template
+        this.mapper[realPath].template
       );
       if (template) {
         // 在切換前觸發 unmount 事件
@@ -114,8 +111,8 @@ export class HistoryRouter {
           }
           this.outlet.appendChild(scriptTag);
         }
-        if (path.split("/").pop()) {
-          document.title = `${this.pageTitle} - ${path.split("/").pop()}`;
+        if (realPath.split("/").pop()) {
+          document.title = `${this.pageTitle} - ${realPath.split("/").pop()}`;
         }
       }
     } catch (error) {
