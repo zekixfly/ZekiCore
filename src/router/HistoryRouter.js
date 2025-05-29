@@ -38,11 +38,14 @@ export class HistoryRouter {
     );
 
     if (sessionStorage.redirect) {
-      const path = sessionStorage.redirect;
+      const redirect = sessionStorage.redirect;
       delete sessionStorage.redirect;
-      history.replaceState(null, "", path);
-      const activeLink = document.querySelector(`a[href="${path}"]`);
-      if (activeLink) activeLink.classList.add('active');
+      history.replaceState(null, "", redirect);
+      const realPath = redirect.startsWith(this.basePath)
+        ? redirect.slice(this.basePath.length) || "/" // 防止空字串
+        : redirect;
+      const activeLink = document.querySelector(`a[href="${realPath}"]`);
+      if (activeLink) activeLink.classList.add("active");
     }
 
     // check if the current path is empty or index for first load
@@ -62,13 +65,17 @@ export class HistoryRouter {
         link.addEventListener("click", (e) => {
           e.preventDefault();
           link.classList.add("active");
-          linkList.forEach(otherLink => {
+          linkList.forEach((otherLink) => {
             if (otherLink !== link) {
               otherLink.classList.remove("active");
             }
-          })
+          });
           // 如果是同一個路徑，則不處理
-          if (link.getAttribute("href") === location.pathname.split(this.basePath ? this.basePath : false).pop()) return;
+          if (
+            link.getAttribute("href") ===
+            location.pathname.split(this.basePath ? this.basePath : false).pop()
+          )
+            return;
           history.pushState(
             null,
             "",
