@@ -41,6 +41,8 @@ export class HistoryRouter {
       const path = sessionStorage.redirect;
       delete sessionStorage.redirect;
       history.replaceState(null, "", path);
+      const activeLink = document.querySelector(`a[href="${path}"]`);
+      if (activeLink) activeLink.classList.add('active');
     }
 
     // check if the current path is empty or index for first load
