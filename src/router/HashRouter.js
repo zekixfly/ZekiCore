@@ -15,9 +15,13 @@ export class HashRouter {
   init(routes) {
     zk.log("HashRouter init");
     const onChange = this.change.bind(this);
+    const onLinkList = this.linkList.bind(this);
 
     // add hashchange listener
     window.addEventListener("hashchange", onChange);
+
+    // add load listener
+    window.addEventListener("load", onLinkList);
 
     // create page mapper
     this.mapper = routes.reduce(
@@ -35,39 +39,37 @@ export class HashRouter {
 
     location.hash = "/";
 
-    // reset hash when reload
-    const old = window.onload;
-    window.onload = async () => {
-      const linkList = this.el.querySelectorAll("a[href]");
-      linkList.forEach((link) => {
-        link.addEventListener("click", async (e) => {
-          e.preventDefault();
-          location.hash =
-            link.getAttribute("href").charAt(0) === "/"
-              ? link.getAttribute("href")
-              : `/${link.getAttribute("href")}`;
-        });
+    window.dispatchEvent(new Event("load"));
+  }
+
+  linkList() {
+    const linkList = this.el.querySelectorAll("a[href]");
+    linkList.forEach((link) => {
+      link.addEventListener("click", async (e) => {
+        e.preventDefault();
+        location.hash =
+          link.getAttribute("href").charAt(0) === "/"
+            ? link.getAttribute("href")
+            : `/${link.getAttribute("href")}`;
       });
-      window.onload = old;
-    };
+    });
   }
 
   async change() {
     const hash = location.hash;
     const path = hash ? hash.substring(1) : "/";
     zk.log(`hash path: ${path}`);
-    
+
     const activeLink = document.querySelector(`a[href="${path}"]`);
     if (activeLink) activeLink.classList.add("active");
     const linkList = this.el.querySelectorAll("a[href]");
-    linkList.forEach(otherLink => {
+    linkList.forEach((otherLink) => {
       if (otherLink !== activeLink) {
         otherLink.classList.remove("active");
       }
-    })
+    });
     try {
       const { template, script } = await fetchTemplate(
-        this.basePath,
         this.mapper[path].template
       );
       if (template) {
@@ -75,14 +77,7 @@ export class HashRouter {
         window.dispatchEvent(new Event("unmount"));
         this.outlet.innerHTML = template.innerHTML;
         if (script) {
-          const scriptTag = document.createElement("script");
-          scriptTag.type = "module";
-          if (script.src) {
-            scriptTag.src = script.src;
-          } else if (script.innerHTML) {
-            scriptTag.innerHTML = script.innerHTML;
-          }
-          this.outlet.appendChild(scriptTag);
+          this.outlet.appendChild(script);
         }
         if (path.split("/").pop()) {
           document.title = `${this.pageTitle} - ${path.split("/").pop()}`;

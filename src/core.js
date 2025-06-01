@@ -3,7 +3,7 @@ import { makeTag, makeText } from "./dom-create.js";
 import { toZekiEl } from "./dom-convert.js";
 import { importJS, loadZekiImports } from "./loader.js";
 import { on, off, bindEvent } from "./event.js";
-import { renderTemplate } from "./template.js";
+import { renderTemplate, fetchTemplate } from "./template.js";
 import { setDebug, log, warn, error } from "./debug.js";
 import {
   one as elOne,
@@ -168,6 +168,12 @@ Object.defineProperties(ZekiCore, {
   },
   renderTemplate: {
     value: renderTemplate,
+    enumerable: true,
+    writable: false,
+    configurable: false,
+  },
+  fetchTemplate: {
+    value: fetchTemplate,
     enumerable: true,
     writable: false,
     configurable: false,

@@ -25,10 +25,10 @@
       }
       a[href] {
         text-decoration: none;
-        color: #000099
+        color: #000099;
       }
       .active {
-        color: red !important;;
+        color: red !important;
         font-weight: bold;
       }
       .highlight {
@@ -55,14 +55,11 @@
     <script src="script/ZekiCore.min.js"></script>
   </head>
   <body>
-    <div>我是外部連結<a href="http://google.com" target="_blank">Google</a></div>
+    <div>
+      我是外部連結<a href="http://google.com" target="_blank">Google</a>
+    </div>
     <div id="root" msg="Hello Tag!!">
-      <h1>前端路由實現 - Hash/History</h1>
-      <ul>
-        <li><a href="/home">home</a></li>
-        <li><a href="/blog">blog</a></li>
-        <li><a href="/about">about</a></li>
-      </ul>
+      <div id="router-link">router links</div>
 
       <div id="router-outlet">index router</div>
       <br />
@@ -75,15 +72,13 @@
       const el = zk.getId("root").getAttr("msg");
       zk.log(el);
 
-      const routes = [
-        { path: "/", template: "home.html" },
-        { path: "/home", template: "home.html" },
-        { path: "/blog", template: "blog.html" },
-        { path: "/about", template: "about.html" },
-      ];
+      (async () => {
+        const { template, script } = await zk.fetchTemplate("nav.html");
+        console.log("template", template);
 
-      const router = zk.getId("root").routerBind({ mode: "history", routes });
-      console.log("router", router);
+        zk.getId("router-link").html = template.innerHTML;
+        zk.getId("router-link").addKid(script);
+      })();
     </script>
   </body>
 </html>

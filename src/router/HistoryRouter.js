@@ -18,6 +18,7 @@ export class HistoryRouter {
   init(routes) {
     zk.log("HistoryRouter init");
     const onChange = this.change.bind(this);
+    const onLinkList = this.linkList.bind(this);
 
     // add pushState listener
     window.addEventListener("pushState", onChange);
@@ -27,6 +28,9 @@ export class HistoryRouter {
 
     // add popstate listener
     window.addEventListener("popstate", onChange);
+
+    // add load listener
+    window.addEventListener("load", onLinkList);
 
     // create page mapper
     this.mapper = routes.reduce(
@@ -51,32 +55,29 @@ export class HistoryRouter {
       history.replaceState(null, "", this.basePath + "/");
     }
 
-    // reset history when reload
-    const old = window.onload;
-    window.onload = async () => {
-      // await onChange();
-      const linkList = this.el.querySelectorAll("a[href]");
-      linkList.forEach((link) => {
-        link.addEventListener("click", (e) => {
-          e.preventDefault();
-          // 如果是同一個路徑，則不處理
-          if (
-            link.getAttribute("href") ===
-            location.pathname.split(this.basePath ? this.basePath : false).pop()
-          )
-            return;
-          history.pushState(
-            null,
-            "",
-            this.basePath +
-              (link.getAttribute("href").charAt(0) === "/" ? "" : "/") +
-              link.getAttribute("href")
-          );
-          // await onChange();
-        });
+    window.dispatchEvent(new Event("load"));
+  }
+
+  linkList() {
+    const linkList = this.el.querySelectorAll("a[href]");
+    linkList.forEach((link) => {
+      link.addEventListener("click", (e) => {
+        e.preventDefault();
+        // 如果是同一個路徑，則不處理
+        if (
+          link.getAttribute("href") ===
+          location.pathname.split(this.basePath ? this.basePath : false).pop()
+        )
+          return;
+        history.pushState(
+          null,
+          "",
+          this.basePath +
+            (link.getAttribute("href").charAt(0) === "/" ? "" : "/") +
+            link.getAttribute("href")
+        );
       });
-      window.onload = old;
-    };
+    });
   }
 
   async change() {
@@ -87,14 +88,13 @@ export class HistoryRouter {
     const activeLink = document.querySelector(`a[href="${realPath}"]`);
     if (activeLink) activeLink.classList.add("active");
     const linkList = this.el.querySelectorAll("a[href]");
-    linkList.forEach(otherLink => {
+    linkList.forEach((otherLink) => {
       if (otherLink !== activeLink) {
         otherLink.classList.remove("active");
       }
-    })
+    });
     try {
       const { template, script } = await fetchTemplate(
-        this.basePath,
         this.mapper[realPath].template
       );
       if (template) {
@@ -102,14 +102,7 @@ export class HistoryRouter {
         window.dispatchEvent(new Event("unmount"));
         this.outlet.innerHTML = template.innerHTML;
         if (script) {
-          const scriptTag = document.createElement("script");
-          scriptTag.type = "module";
-          if (script.src) {
-            scriptTag.src = script.src;
-          } else if (script.innerHTML) {
-            scriptTag.innerHTML = script.innerHTML;
-          }
-          this.outlet.appendChild(scriptTag);
+          this.outlet.appendChild(script);
         }
         if (realPath.split("/").pop()) {
           document.title = `${this.pageTitle} - ${realPath.split("/").pop()}`;

@@ -1,4 +1,4 @@
-import { loadZekiImports } from './loader.js'
+import { loadZekiImports } from "./loader.js";
 export function initializeZekiCore() {
   // 顯示版權聲明
   const crz = "Copyright Zone";
@@ -14,6 +14,14 @@ export function initializeZekiCore() {
     三、出處來源: https://zekixfly.github.io/
     \n${line}`,
     "font-size: small; color: brown;"
+  );
+
+  // 設定 sessionStorage.basePath 為當前路徑，這樣可以在其他模組中載入資源時使用，這樣做是為了避免在不同路徑下載入資源時出現錯誤。
+  sessionStorage.basePath = location.href.slice(
+    0,
+    location.hash.includes("#")
+      ? location.href.lastIndexOf("/#")
+      : location.href.lastIndexOf("/")
   );
 
   // 禁止使用者操作

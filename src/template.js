@@ -83,9 +83,16 @@ export function renderTemplate(rootEl, scope = {}) {
  * @param {string} templateHTML - 模板的路徑，通常是相對於 `template/` 目錄的路徑。
  * @returns {Promise<{template: HTMLTemplateElement, script: HTMLScriptElement}>} 返回一個包含模板和腳本元素的 Promise。
  */
-export async function fetchTemplate(basePath, templateHTML) {
+export async function fetchTemplate(templateHTML) {
+  // 如果有 sessionStorage.basePath，則使用它作為基礎路徑，否則使用當前目錄。
+  const basePath = `${
+    sessionStorage.basePath ? sessionStorage.basePath : "."
+  }/template`;
+
   const response = await fetch(
-    `${location.origin + basePath}/template/${templateHTML.includes(".html") ? templateHTML : templateHTML + ".html"}`
+    `${basePath}/${
+      templateHTML.includes(".html") ? templateHTML : templateHTML + ".html"
+    }`
   );
   const templateText = await response.text();
 
@@ -106,6 +113,17 @@ export async function fetchTemplate(basePath, templateHTML) {
   }
 
   if (!script) script = htmlElement.querySelector("script");
+
+  if (script) {
+    const scriptTag = document.createElement("script");
+    scriptTag.type = "module";
+    if (script.src) {
+      scriptTag.src = script.src;
+    } else if (script.innerHTML) {
+      scriptTag.innerHTML = script.innerHTML;
+    }
+    script = scriptTag;
+  }
 
   return { template, script };
 }
