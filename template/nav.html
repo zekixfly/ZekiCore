@@ -1,0 +1,20 @@
+<template>
+  <h1>前端路由實現 - Hash/History</h1>
+  <ul>
+    <li><a href="/home">home</a></li>
+    <li><a href="/blog">blog</a></li>
+    <li><a href="/about">about</a></li>
+  </ul>
+</template>
+
+<script>
+  const routes = [
+    { path: "/", template: "home.html" },
+    { path: "/home", template: "home.html" },
+    { path: "/blog", template: "blog.html" },
+    { path: "/about", template: "about.html" },
+  ];
+
+  const router = zk.getId("root").routerBind({ mode: "hash", routes });
+  console.log("router", router);
+</script>
