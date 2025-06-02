@@ -84,8 +84,8 @@ export class HistoryRouter {
     const path = location.pathname;
     const realPath = path.split(this.basePath ? this.basePath : false).pop();
     zk.log(`history path: ${realPath}`);
-
-    const activeLink = document.querySelector(`a[href="${realPath}"]`);
+    
+    const activeLink = document.querySelector(`a[href*="${realPath.charAt(0)  === "/" ? realPath.substring(1) : realPath}"]`);
     if (activeLink) activeLink.classList.add("active");
     const linkList = this.el.querySelectorAll("a[href]");
     linkList.forEach((otherLink) => {

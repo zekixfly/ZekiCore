@@ -60,7 +60,7 @@ export class HashRouter {
     const path = hash ? hash.substring(1) : "/";
     zk.log(`hash path: ${path}`);
 
-    const activeLink = document.querySelector(`a[href="${path}"]`);
+    const activeLink = document.querySelector(`a[href*="${path.charAt(0)  === "/" ? path.substring(1) : path}"]`);
     if (activeLink) activeLink.classList.add("active");
     const linkList = this.el.querySelectorAll("a[href]");
     linkList.forEach((otherLink) => {
