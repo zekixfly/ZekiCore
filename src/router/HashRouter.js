@@ -25,7 +25,10 @@ export class HashRouter {
 
     // create page mapper
     this.mapper = routes.reduce(
-      (acc, curr) => ({ ...acc, [curr.path]: curr }),
+      (acc, curr) => ({ 
+        ...acc, 
+        [(curr.path.charAt(0) === "/" ? "" : "/") + curr.path]: curr 
+      }),
       {}
     );
 
