@@ -25,7 +25,7 @@ export class HistoryRouter extends BaseRouter {
 
     // add load listener
     window.addEventListener("load", () => this.bindLinks(
-      () => location.pathname.split(this.basePath).pop(),
+      () => location.pathname.split(this.basePath ? this.basePath : false).pop(),
       (targetPath) => history.pushState(null, "", this.basePath + targetPath)
     ));
 
@@ -46,7 +46,7 @@ export class HistoryRouter extends BaseRouter {
   }
 
   change() {
-    const realPath = location.pathname.split(this.basePath).pop();
+    const realPath = location.pathname.split(this.basePath ? this.basePath : false).pop();
     this.render(realPath || "/");
   }
 }
