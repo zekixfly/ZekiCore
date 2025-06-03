@@ -55,6 +55,10 @@ ZekiCore/
 ```html
 <script type="text/javascript" src="dist/ZekiCore.min.js"></script>
 ```
+或者直接引用線上版本：
+```html
+<script type="text/javascript" src="https://zekixfly.github.io/ZekiCore/script/ZekiCore.min.js"></script>
+```
 
 ## API 文檔
 ### DOM 操作
@@ -78,6 +82,7 @@ ZekiCore/
 * `el.delClass(className)`：為當前元素移除類名。
 * `el.siblings()`：獲取當前元素的兄弟元素集合。
 * `el.dataBind(data)`：將數據綁定到當前元素，並渲染模板。
+* `el.routerBind(option)`：將路由綁定到當前元素，支援 hash/history 模式。
 * `el.on(eventType, handler)`：為當前元素綁定事件。
 * `el.off(eventType, handler)`：為當前元素移除事件。
 
@@ -87,7 +92,8 @@ ZekiCore/
 * `zk.bindEvent(fn, customEventName)`：綁定自定義事件。
 
 ### 模板渲染
-* `zk.renderTemplate(template, scope)`：渲染模板字符串。
+* `zk.renderTemplate(rootEl, scope)`：渲染模板字符串。
+* `zk.fetchTemplate(templateHTML)`：從指定的模板路徑，通常是相對於 `template/` 目錄的路徑，非同步載入 HTML 模板內容，回傳 Promise。
 
 ### 集合操作
 * `zk.all(selector)`：返回一個類陣列 ZekiCollection，支持對多個元素進行批量操作。
@@ -137,7 +143,7 @@ ZekiCore/
 * `zk.log(...args)`：輸出調試信息。
 
 ## 版本信息
-當前版本：`2.2.3`
+當前版本：`2.2.7`
 
 ## 貢獻指南
 1. Fork 此倉庫。
