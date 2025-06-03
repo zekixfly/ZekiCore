@@ -1,9 +1,7 @@
 // src/element.js
 import { ZekiElement, ZekiCollection } from "./core.js";
-// import { ZekiFragment } from "./fragment.js";
 import { renderTemplate } from "./template.js";
-import { HashRouter } from "./router/HashRouter.js";
-import { HistoryRouter } from "./router/HistoryRouter.js";
+import RouterMap from "./router/map.js";
 
 /**
  * get element by selector.
@@ -285,18 +283,10 @@ export function dataBind(data = {}) {
  * @example zk.getId('id').routerBind({ mode: 'hash', routes: [{ path: '/', template: 'home.html' }] });
  */
 export function routerBind({ mode = "hash", routes = [] }) {
-  if (!routes.length) console.warn("routes has not any data.");
-  let router;
-  switch (mode) {
-    case "hash":
-      router = new HashRouter(this.el, routes);
-      break;
-    case "history":
-      router = new HistoryRouter(this.el, routes);
-      break;
-    default:
-      break;
-  }
+  if (!routes.length) console.warn("ZekiCore router: routes has not any data.");
+  const RouterClass = RouterMap[mode];
+  if (!RouterClass) throw new Error(`ZekiCore router: Unknown mode "${mode}"`);
+  const router = new RouterClass(this.el, routes);
   return router;
 }
 
