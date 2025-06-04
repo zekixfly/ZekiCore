@@ -23,6 +23,7 @@ import {
   before,
   addClass,
   delClass,
+  hasClass,
   siblings,
   dataBind,
   routerBind,
@@ -324,6 +325,12 @@ Object.defineProperties(ZekiElement.prototype, {
   },
   delClass: {
     value: delClass,
+    writable: false,
+    enumerable: true,
+    configurable: false,
+  },
+  hasClass: {
+    value: hasClass,
     writable: false,
     enumerable: true,
     configurable: false,

@@ -89,6 +89,7 @@ ZekiCore/
 * `el.setAttr(attr, value)`：設置當前元素的屬性值。
 * `el.addClass(className)`：為當前元素添加類名。
 * `el.delClass(className)`：為當前元素移除類名。
+* `el.hasClass(...classNames)`：判斷當前元素是否包含指定的一個或多個類名。
 * `el.siblings()`：獲取當前元素的兄弟元素集合。
 * `el.dataBind(data)`：將數據綁定到當前元素，並渲染模板。
 * `el.routerBind(option)`：將路由綁定到當前元素，支援 hash/history 模式。
@@ -152,7 +153,7 @@ ZekiCore/
 * `zk.log(...args)`：輸出調試信息。
 
 ## 版本信息
-當前版本：`2.2.7`
+當前版本：`2.2.8`
 
 ## 貢獻指南
 1. Fork 此倉庫。

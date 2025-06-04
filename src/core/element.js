@@ -188,6 +188,15 @@ export function delClass(className) {
 }
 
 /**
+ * contains Class
+ * @param  {...string} classNames - 要檢查的類名
+ * @returns {boolean} - 返回布林值
+ */
+export function hasClass(...classNames) {
+  return this.el.classList.contains(...classNames);
+}
+
+/**
  * 獲取當前元素的兄弟元素集合
  * @returns {ZekiCollection} - 返回當前元素的兄弟元素集合
  * @example const siblings = zk.getId('id').siblings(); // 取得除了 id 自己以外的兄弟元素集合
