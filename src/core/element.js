@@ -1,7 +1,7 @@
 // src/element.js
 import { ZekiElement, ZekiCollection } from "./core.js";
-import { renderTemplate } from "./template.js";
-import RouterMap from "./router/map.js";
+import { renderTemplate } from "../template.js";
+import RouterMap from "../router/map.js";
 
 /**
  * get element by selector.

@@ -1,5 +1,5 @@
 // src/index.js
-import { ZekiCore } from './core.js';
+import { ZekiCore } from './core/core.js';
 import { initializeZekiCore } from './init.js';
 
 Object.freeze(ZekiCore); // 避免改動

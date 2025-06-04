@@ -1,4 +1,4 @@
-import { ZekiElement, ZekiCollection } from "./core.js";
+import { ZekiElement, ZekiCollection } from "./core/core.js";
 
 export class ZekiFragment {
   constructor(element) {

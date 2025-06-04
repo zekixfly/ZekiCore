@@ -13,27 +13,36 @@ ZekiCore 是一個輕量級的 JavaScript 庫，旨在簡化 DOM 操作、事件
 
 ## 文件結構
 ```bash
-ZekiCore/ 
-├── dist/ # 編譯後的輸出文件 
-├── src/ # 源碼文件 
-│   ├── collection.js # ZekiCollection 類，提供對多個 DOM 元素的批量操作功能
-│   ├── core.js # ZekiCore 核心模組，定義主要功能和命名空間
-│   ├── debug.js # 調試工具，用於輸出調試信息
-│   ├── dom-convert.js # DOM 元素轉換工具，將 DOM 元素轉換為 ZekiElement
-│   ├── dom-create.js # DOM 元素建立工具，用於創建新元素或文本節點
-│   ├── dom-select.js # DOM 元素選擇工具，提供便捷的選擇器方法
-│   ├── element.js # ZekiElement 類及其方法，封裝單個 DOM 元素的操作
-│   ├── event.js # 全局事件處理，提供事件綁定和移除功能
-│   ├── index.js # 入口文件，初始化 ZekiCore 並設置全局變數
-│   ├── init.js # 初始化腳本，設置版權聲明和全局事件
-│   ├── loader.js # 動態腳本加載工具，用於加載外部腳本
-│   ├── template.js # 模板渲染工具，用於數據綁定和模板渲染
-│   └── version.js # 版本信息，定義當前版本號
-├── index.html # 示例 HTML 文件 
-├── package.json # 項目配置文件 
-├── rollup.config.js # Rollup 打包配置 
-├── .gitignore # Git 忽略文件
-└── ZekiCore.js # 舊版 - 直接寫在原型上未模組化的框架(1.0.0紀念版)
+ZekiCore/
+├── dist/                    # 發佈與範例相關檔案
+│   ├── script/              # 編譯後的輸出文件 (ZekiCore.min.js 等)
+│   └── index.html           # 範例 HTML 文件（以及其他 demo 檔案）
+├── src/                     # 原始碼目錄
+│   ├── debug.js             # 調試工具
+│   ├── event.js             # 全域事件處理
+│   ├── fragment.js          # 虛擬片段/節點操作
+│   ├── index.js             # 入口文件
+│   ├── init.js              # 初始化腳本
+│   ├── loader.js            # 動態腳本加載工具
+│   ├── template.js          # 模板渲染與模板載入
+│   ├── core/                # 核心功能模組
+│   │   ├── collection.js    # ZekiCollection 類與集合操作
+│   │   ├── core.js          # ZekiCore 主命名空間與整合
+│   │   ├── element.js       # ZekiElement 類及其方法
+│   │   └── version.js       # 版本資訊
+│   ├── dom/                 # DOM 操作相關
+│   │   ├── dom-convert.js   # DOM 元素轉換工具
+│   │   ├── dom-create.js    # DOM 元素建立工具
+│   │   └── dom-select.js    # DOM 元素選擇工具
+│   └── router/              # 路由模組
+│       ├── BaseRouter.js
+│       ├── HashRouter.js
+│       ├── HistoryRouter.js
+│       └── map.js
+├── package.json             # 專案設定
+├── rollup.config.js         # 打包設定
+├── .gitignore               # Git 忽略文件
+└── ZekiCore.js              # 舊版(1.0.0)原型
 ```
 
 
@@ -53,7 +62,7 @@ ZekiCore/
 ## 使用
 在 HTML 文件中引入編譯後的腳本：
 ```html
-<script type="text/javascript" src="dist/ZekiCore.min.js"></script>
+<script type="text/javascript" src="script/ZekiCore.min.js"></script>
 ```
 或者直接引用線上版本：
 ```html

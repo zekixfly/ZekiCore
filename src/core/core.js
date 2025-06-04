@@ -1,10 +1,10 @@
-import { one, all, getId, getIds, getTag, getClass } from "./dom-select.js";
-import { makeTag, makeText } from "./dom-create.js";
-import { toZekiEl } from "./dom-convert.js";
-import { importJS, loadZekiImports } from "./loader.js";
-import { on, off, bindEvent } from "./event.js";
-import { renderTemplate, fetchTemplate } from "./template.js";
-import { setDebug, log, warn, error } from "./debug.js";
+import { one, all, getId, getIds, getTag, getClass } from "../dom/dom-select.js";
+import { makeTag, makeText } from "../dom/dom-create.js";
+import { toZekiEl } from "../dom/dom-convert.js";
+import { importJS, loadZekiImports } from "../loader.js";
+import { on, off, bindEvent } from "../event.js";
+import { renderTemplate, fetchTemplate } from "../template.js";
+import { setDebug, log, warn, error } from "../debug.js";
 import {
   one as elOne,
   all as elAll,

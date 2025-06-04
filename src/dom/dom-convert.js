@@ -1,5 +1,5 @@
 // src/dom-convert.js
-import { ZekiElement } from './core.js';
+import { ZekiElement } from '../core/core.js';
 
 /**
   * 將 DOM 元素轉換為 ZekiElement 實例
