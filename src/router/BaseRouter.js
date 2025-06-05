@@ -29,10 +29,13 @@ export class BaseRouter {
     }
 
     async render(path) {
-        const realPath = path;
-        zk.log(`[Router] render path: ${realPath}`);
+        let routePath = path;
+        zk.log(`[Router] render path: ${routePath}`);
+        const route = this.mapper[routePath];
+        if (!route) throw new Error(`Route not found: ${routePath}`);
+        if (routePath === "/") routePath = Object.entries(this.mapper).find(([key, {path, template}]) => (route.template === template) && route.path !== path).at(0) || "/";
 
-        const activeLink = document.querySelector(`a[href*="${realPath.charAt(0) === "/" ? realPath.substring(1) : realPath}"]`);
+        const activeLink = document.querySelector(`a[href*="${routePath.charAt(0) === "/" ? routePath.substring(1) : routePath}"]`);
         if (activeLink) activeLink.classList.add("active");
 
         const linkList = this.el.querySelectorAll("a[href]");
@@ -41,15 +44,12 @@ export class BaseRouter {
         });
 
         try {
-            const route = this.mapper[realPath];
-            if (!route) throw new Error(`Route not found: ${realPath}`);
-
             const { template, script } = await fetchTemplate(route.template);
             // 在切換前觸發 unmount 事件
             window.dispatchEvent(new Event("unmount"));
             this.outlet.innerHTML = template.innerHTML;
             if (script) this.outlet.appendChild(script);
-            if (realPath.split("/").pop()) document.title = `${this.pageTitle} - ${realPath.split("/").pop().replace(/^./, (c) => c.toUpperCase())}`;
+            if (routePath.split("/").pop()) document.title = `${this.pageTitle} - ${routePath.split("/").pop().replace(/^./, (c) => c.toUpperCase())}`;
         } catch (error) {
             zk.warn("[Router] Render error:", error);
             this.outlet.innerHTML = `<h1>404 Not Found</h1>`;
