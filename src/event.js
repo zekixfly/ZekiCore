@@ -47,8 +47,8 @@ export function off(eventType, handler) {
  */
 export function bindEvent(fn, customEventName) {
   // 找尋原物件、原函式及函式名稱。
-  const objsArr = [frames,location,console,history,document,navigator,screen,window];
-  let functionName,origObject;
+  const objsArr = [window, document, history, navigator, screen, location, frames, console];
+  let functionName, origObject;
   const origFunction = fn; // 儲存原函式，避免被覆蓋。
 
   for ( const obj of objsArr ) {

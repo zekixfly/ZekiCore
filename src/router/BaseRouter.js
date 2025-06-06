@@ -31,19 +31,19 @@ export class BaseRouter {
     async render(path) {
         let routePath = path;
         zk.log(`[Router] render path: ${routePath}`);
-        const route = this.mapper[routePath];
-        if (!route) throw new Error(`Route not found: ${routePath}`);
-        if (routePath === "/") routePath = Object.entries(this.mapper).find(([key, {path, template}]) => (route.template === template) && route.path !== path).at(0) || "/";
-
-        const activeLink = document.querySelector(`a[href*="${routePath.charAt(0) === "/" ? routePath.substring(1) : routePath}"]`);
-        if (activeLink) activeLink.classList.add("active");
-
-        const linkList = this.el.querySelectorAll("a[href]");
-        linkList.forEach((link) => {
-            if(link !== activeLink) link.classList.remove("active");
-        });
-
         try {
+            const route = this.mapper[routePath];
+            if (!route) throw new Error(`Route not found: ${routePath}`);
+            if (routePath === "/") routePath = Object.entries(this.mapper).find(([key, {path, template}]) => (route.template === template) && route.path !== path).at(0) || "/";
+
+            const activeLink = document.querySelector(`a[href*="${routePath.charAt(0) === "/" ? routePath.substring(1) : routePath}"]`);
+            if (activeLink) activeLink.classList.add("active");
+
+            const linkList = this.el.querySelectorAll("a[href]");
+            linkList.forEach((link) => {
+                if(link !== activeLink) link.classList.remove("active");
+            });
+
             const { template, script } = await fetchTemplate(route.template);
             // 在切換前觸發 unmount 事件
             window.dispatchEvent(new Event("unmount"));
