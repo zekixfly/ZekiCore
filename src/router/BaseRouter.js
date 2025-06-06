@@ -52,8 +52,16 @@ export class BaseRouter {
             if (routePath.split("/").pop()) document.title = `${this.pageTitle} - ${routePath.split("/").pop().replace(/^./, (c) => c.toUpperCase())}`;
         } catch (error) {
             zk.warn("[Router] Render error:", error);
-            this.outlet.innerHTML = `<h1>404 Not Found</h1>`;
-            document.title = "404 Not Found";
+            // 嘗試載入自訂 404.html
+            try {
+                const { template, script } = await fetchTemplate("404.html");
+                this.outlet.innerHTML = template.innerHTML;
+                if (script) this.outlet.appendChild(script);
+            } catch (e) {
+                // 若找不到 404.html 則顯示預設內容
+                this.outlet.innerHTML = `<h1>404 Not Found</h1>`;
+                document.title = "404 Not Found";
+            }
         }
     }
 }
