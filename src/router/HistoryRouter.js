@@ -34,12 +34,10 @@ export class HistoryRouter extends BaseRouter {
       const redirect = sessionStorage.redirect;
       delete sessionStorage.redirect;
       history.replaceState(null, "", redirect);
-    }
-
-    // check if the current path is empty or index for first load
-    if (location.pathname.split("/").pop().includes("index")) {
+    // check if the current path is index for first load
+    } else if (location.pathname.split("/").pop().includes("index")) {
       history.replaceState(null, "", this.basePath + "/");
-    } else {
+    } else  {
       this.change();
     }
 
