@@ -30,6 +30,8 @@ import {
   on as elOn,
   off as elOff,
   click,
+  hide,
+  show,
   getHTML,
   setHTML,
   getText,
@@ -367,6 +369,18 @@ Object.defineProperties(ZekiElement.prototype, {
   },
   click: {
     value: click,
+    writable: false,
+    enumerable: true,
+    configurable: false,
+  },
+  hide: {
+    value: hide,
+    writable: false,
+    enumerable: true,
+    configurable: false,
+  },
+  show: {
+    value: show,
     writable: false,
     enumerable: true,
     configurable: false,

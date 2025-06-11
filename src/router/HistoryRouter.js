@@ -37,12 +37,13 @@ export class HistoryRouter extends BaseRouter {
     }
 
     // check if the current path is empty or index for first load
-    if (!location.pathname.split("/").pop() || location.pathname.split("/").pop().includes("index")) {
+    if (location.pathname.split("/").pop().includes("index")) {
       history.replaceState(null, "", this.basePath + "/");
+    } else {
+      this.change();
     }
 
     window.dispatchEvent(new Event("load"));
-    this.change();
   }
 
   change() {

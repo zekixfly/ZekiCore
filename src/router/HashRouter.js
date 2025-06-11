@@ -27,10 +27,11 @@ export class HashRouter extends BaseRouter {
     ) {
       location.href = this.basePath + "/#";
       location.hash = "/";
-    }   
+    } else {
+      this.change();
+    }
 
     window.dispatchEvent(new Event("load"));
-    this.change();
   }
 
 

@@ -326,10 +326,28 @@ export function off(eventType, handler) {
 
 /**
  * 元素點擊事件
- * @returns {ZekiElement} - 返回當前元素的父元素
+ * @returns {ZekiElement} - 返回當前的 ZekiElement 實例
  */
 export function click() {
   this.el.click();
+  return this;
+}
+
+/**
+ * 隱藏元素
+ * @returns {ZekiElement} - 返回當前的 ZekiElement 實例
+ */
+export function hide() {
+  this.el.hidden = true;
+  return this;
+}
+
+/**
+ * 顯示元素
+ * @returns {ZekiElement} - 返回當前的 ZekiElement 實例
+ */
+export function show() {
+  this.el.hidden = false;
   return this;
 }
 
