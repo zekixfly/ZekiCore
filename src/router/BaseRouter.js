@@ -32,10 +32,20 @@ export class BaseRouter {
         let routePath = path;
         zk.log(`[Router] render path: ${routePath}`);
         try {
-            const route = this.mapper[routePath];
-            if (!route) throw new Error(`Route not found: ${routePath}`);
-            if (routePath === "/") routePath = Object.entries(this.mapper).find(([key, {path, template}]) => (route.template === template) && route.path !== path).at(0) || "/";
 
+            const checkRoute = route => {
+                if (!route) throw new Error(`Route not found: ${routePath}`);
+            }
+
+            let route = this.mapper[routePath];
+            checkRoute(route);
+
+            const redirect = route.redirect;
+            if (redirect) {
+                routePath = redirect;
+                route = this.mapper[routePath];
+                checkRoute(route);
+            }
             const activeLink = document.querySelector(`a[href*="${routePath.charAt(0) === "/" ? routePath.substring(1) : routePath}"]`);
             if (activeLink) activeLink.classList.add("active");
 
