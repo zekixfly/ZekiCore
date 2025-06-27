@@ -32,20 +32,25 @@ export class BaseRouter {
         let routePath = path;
         zk.log(`[Router] render path: ${routePath}`);
         try {
-
-            const checkRoute = route => {
-                if (!route) throw new Error(`Route not found: ${routePath}`);
+            // 檢查路由是否存在
+            const checkRoute = (route, path) => {
+                if (!route) throw new Error(`Route not found: ${path}`);
             }
 
+            // 處裡多層 redirect，並防止無限迴圈
+            const visited = new Set();
             let route = this.mapper[routePath];
-            checkRoute(route);
+            checkRoute(route, routePath);
 
-            const redirect = route.redirect;
-            if (redirect) {
-                routePath = redirect;
+            while (route.redirect) {
+                if (visited.has(routePath)) throw new Error(`Redirect loop detected: ${routePath}`);
+                visited.add(routePath);
+                routePath = route.redirect;
                 route = this.mapper[routePath];
-                checkRoute(route);
+                checkRoute(route, routePath);
             }
+
+            // Active link 標記
             const activeLink = document.querySelector(`a[href*="${routePath.charAt(0) === "/" ? routePath.substring(1) : routePath}"]`);
             if (activeLink) activeLink.classList.add("active");
 
@@ -54,11 +59,15 @@ export class BaseRouter {
                 if(link !== activeLink) link.classList.remove("active");
             });
 
+            // 載入模板
             const { template, script } = await fetchTemplate(route.template);
+
             // 在切換前觸發 unmount 事件
             window.dispatchEvent(new Event("unmount"));
             this.outlet.innerHTML = template.innerHTML;
             if (script) this.outlet.appendChild(script);
+
+            // 動態設定標題
             if (routePath.split("/").pop()) document.title = `${this.pageTitle} - ${routePath.split("/").pop().replace(/^./, (c) => c.toUpperCase())}`;
         } catch (error) {
             zk.warn("[Router] Render error:", error);
