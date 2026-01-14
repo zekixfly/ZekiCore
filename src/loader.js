@@ -15,6 +15,7 @@ export function importJS(jsArray) {
   for (let i = 0; i < jsArray.length; i++) {
     scriptTag = document.createElement("script");
     scriptTag.async = false;
+    scriptTag.defer = true;
     scriptTag.type = "text/javascript";
     scriptTag.src = jsArray[i];
     scriptTag.onerror = () => {
@@ -42,6 +43,7 @@ export function loadZekiImports() {
   if (ImportSrc) {
     const importTag = document.createElement("script");
     importTag.async = false;
+    importTag.defer = true;
     importTag.type = "text/javascript";
     importTag.src = ZekiScript.attributes.src.value.split('/').fill(ImportSrc, -1).join('/') + (ImportSrc.includes('.js') ? '' : '.js');
     importTag.onerror = () => {
