@@ -6,8 +6,8 @@ import { bindEvent } from "../event.js";
 export class HistoryRouter extends BaseRouter {
   constructor(rootEl, routes) {
     super(rootEl, routes);
-    bindEvent(history.pushState);
-    bindEvent(history.replaceState);
+    bindEvent(history.pushState.name);
+    bindEvent(history.replaceState.name);
     this.init();
   }
 
@@ -18,10 +18,10 @@ export class HistoryRouter extends BaseRouter {
     window.addEventListener("popstate", () => this.change());
 
     // add pushState listener
-    window.addEventListener("pushState", () => this.change());
+    window.addEventListener(history.pushState.name, () => this.change());
 
     // add replaceState listener
-    window.addEventListener("replaceState", () => this.change());
+    window.addEventListener(history.replaceState.name, () => this.change());
 
     // add load listener
     window.addEventListener("load", () => this.bindLinks(
