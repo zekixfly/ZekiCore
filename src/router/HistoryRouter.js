@@ -6,8 +6,8 @@ import { bindEvent } from "../event.js";
 export class HistoryRouter extends BaseRouter {
   constructor(rootEl, routes) {
     super(rootEl, routes);
-    bindEvent(history.pushState.name);
-    bindEvent(history.replaceState.name);
+    bindEvent(history.pushState);
+    bindEvent(history.replaceState);
     this.init();
   }
 
