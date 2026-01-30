@@ -18,10 +18,10 @@ export class HistoryRouter extends BaseRouter {
     window.addEventListener("popstate", () => this.change());
 
     // add pushState listener
-    window.addEventListener(history.pushState.name, () => this.change());
+    window.addEventListener("pushState", () => this.change());
 
     // add replaceState listener
-    window.addEventListener(history.replaceState.name, () => this.change());
+    window.addEventListener("replaceState", () => this.change());
 
     // add load listener
     window.addEventListener("load", () => this.bindLinks(

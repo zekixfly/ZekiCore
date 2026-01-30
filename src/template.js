@@ -112,7 +112,7 @@ export async function fetchTemplate(templateHTML) {
     if (script) script.remove();
   }
 
-  if (!script) script = htmlElement.querySelector("script");
+  if (!script) script = htmlElement.querySelector("template + script");
 
   if (script) {
     const scriptTag = document.createElement("script");
