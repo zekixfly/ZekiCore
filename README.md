@@ -9,6 +9,7 @@ ZekiCore 是一個輕量級的 JavaScript 庫，旨在簡化 DOM 操作、事件
 - **模板渲染**：支持基於模板字符串的數據綁定和渲染。
 - **集合操作**：支持對多個 DOM 元素進行批量操作。
 - **動態腳本加載**：支持動態導入 JavaScript 文件。
+- **路由系統**：支援 History/Hash 模式，並提供巢狀路由、動態參數路由與自動 active 狀態。
 - **輕量級**：核心功能集中，無額外依賴。
 
 ## 文件結構
@@ -96,6 +97,25 @@ ZekiCore/
 * `el.on(eventType, handler)`：為當前元素綁定事件。
 * `el.off(eventType, handler)`：為當前元素移除事件。
 
+### 路由系統
+* `el.routerBind(option)`：將路由綁定到元素，支援 `history` 或 `hash` 模式。
+  ```javascript
+  const routes = [
+    { path: "/", redirect: "/home" },
+    { path: "/home", template: "home.html" },
+    {
+      path: "/about",
+      template: "about.html",
+      children: [
+        { path: "/:id", template: "about.html" }
+      ]
+    }
+  ];
+
+  zk.getId("root").routerBind({ mode: "history", routes });
+  ```
+* 支援巢狀路由、動態參數路由，以及自動為匹配連結加上 `active` 類名。
+
 ### 事件處理
 * `zk.on(eventType, handler)`：綁定事件。
 * `zk.off(eventType, handler)`：移除事件。
@@ -153,7 +173,7 @@ ZekiCore/
 * `zk.log(...args)`：輸出調試信息。
 
 ## 版本信息
-當前版本：`2.2.15`
+當前版本：`2.3.0`
 
 ## 貢獻指南
 1. Fork 此倉庫。

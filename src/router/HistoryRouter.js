@@ -8,6 +8,8 @@ export class HistoryRouter extends BaseRouter {
     super(rootEl, routes);
     bindEvent(history.pushState);
     bindEvent(history.replaceState);
+    this.realPath = () => location.pathname.split(this.basePath ? this.basePath : false).pop();
+    this.pushStateMethod = () => (targetPath) => history.pushState(null, "", this.basePath + targetPath);
     this.init();
   }
 
@@ -25,8 +27,8 @@ export class HistoryRouter extends BaseRouter {
 
     // add load listener
     window.addEventListener("load", () => this.bindLinks(
-      () => location.pathname.split(this.basePath ? this.basePath : false).pop(),
-      (targetPath) => history.pushState(null, "", this.basePath + targetPath)
+      this.realPath,
+      this.pushStateMethod()
     ));
 
     // check if there is a redirect in sessionStorage, and replace the current state
@@ -45,7 +47,6 @@ export class HistoryRouter extends BaseRouter {
   }
 
   change() {
-    const realPath = location.pathname.split(this.basePath ? this.basePath : false).pop();
-    this.render(realPath || "/");
+    this.render(this.realPath, this.pushStateMethod());
   }
 }

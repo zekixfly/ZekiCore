@@ -5,6 +5,8 @@ import { BaseRouter } from "./BaseRouter.js";
 export class HashRouter extends BaseRouter {
   constructor(rootEl, routes) {
     super(rootEl, routes);
+    this.hashPath = () => (location.hash || "#/").substring(1);
+    this.hashChangeMethod = () => (targetPath) => location.hash = targetPath;
     this.init();
   }
 
@@ -16,8 +18,8 @@ export class HashRouter extends BaseRouter {
 
     // add load listener
     window.addEventListener("load", () => this.bindLinks(
-      () => location.hash.substring(1),
-      (target) => location.hash = target
+      this.hashPath,
+      this.hashChangeMethod()
     ));
 
     // check if the current hash is empty or index for first load
@@ -36,8 +38,6 @@ export class HashRouter extends BaseRouter {
 
 
   change() {
-    const hash = location.hash || "#/";
-    const path = hash.substring(1);
-    this.render(path);
+    this.render(this.hashPath, this.hashChangeMethod());
   }
 }
