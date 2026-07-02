@@ -12,7 +12,13 @@
     { path: "/", redirect: "/home" },
     { path: "/home", template: "home.html" },
     { path: "/blog", template: "blog.html" },
-    { path: "/about", template: "about.html" },
+    {
+      path: "/about",
+      template: "about.html",
+      children: [
+        {path: "/:id", template: "about.html"},
+      ] 
+    },
   ];
 
   const router = zk.getId("root").routerBind({ mode: "history", routes });
