@@ -496,6 +496,114 @@ export function setSRC(src) {
 }
 
 /**
+ * 獲取元素的 offsetHeight 屬性
+ * @returns {number} - 返回當前元素的 offsetHeight 屬性值
+ */
+export function getOffsetHeight() {
+  return this.el.offsetHeight;
+}
+
+/**
+ * 設置元素的 offsetHeight 屬性
+ * @param {number} offsetHeight - 要設置的 offsetHeight 屬性值
+ * @returns {ZekiElement} - 返回當前的 ZekiElement 實例
+ */
+export function setOffsetHeight(offsetHeight) {
+  this.el.offsetHeight = offsetHeight;
+  return this;
+}
+
+/**
+ * 獲取元素的 offsetLeft 屬性
+ * @returns {number} - 返回當前元素的 offsetLeft 屬性值
+ */
+export function getOffsetLeft() {
+  return this.el.offsetLeft;
+}
+
+/**
+ * 設置元素的 offsetLeft 屬性
+ * @param {number} offsetLeft - 要設置的 offsetLeft 屬性值
+ * @returns {ZekiElement} - 返回當前的 ZekiElement 實例
+ */
+export function setOffsetLeft(offsetLeft) {
+  this.el.offsetLeft = offsetLeft;
+  return this;
+}
+
+/**
+ * 獲取元素的 offsetTop 屬性
+ * @returns {number} - 返回當前元素的 offsetTop 屬性值
+ */
+export function getOffsetTop() {
+  return this.el.offsetTop;
+}
+
+/**
+ * 設置元素的 offsetTop 屬性
+ * @param {number} offsetTop - 要設置的 offsetTop 屬性值
+ * @returns {ZekiElement} - 返回當前的 ZekiElement 實例
+ */
+export function setOffsetTop(offsetTop) {
+  this.el.offsetTop = offsetTop;
+  return this;
+}
+
+/**
+ * 獲取元素的 offsetWidth 屬性
+ * @returns {number} - 返回當前元素的 offsetWidth 屬性值
+ */
+export function getOffsetWidth() {
+  return this.el.offsetWidth;
+}
+
+/**
+ * 設置元素的 offsetWidth 屬性
+ * @param {number} offsetWidth - 要設置的 offsetWidth 屬性值
+ * @returns {ZekiElement} - 返回當前的 ZekiElement 實例
+ */
+export function setOffsetWidth(offsetWidth) {
+  this.el.offsetWidth = offsetWidth;
+  return this;
+}
+
+/**
+ * 獲取元素的 scrollHeight 屬性
+ * @returns {number} - 返回當前元素的 scrollHeight 屬性值
+ */
+export function getScrollHeight() {
+  return this.el.scrollHeight;
+}
+
+/**
+ * 設置元素的 scrollHeight 屬性
+ * @param {number} scrollHeight - 要設置的 scrollHeight 屬性值
+ * @returns {ZekiElement} - 返回當前的 ZekiElement 實例
+ */
+export function setScrollHeight(scrollHeight) {
+  this.el.scrollHeight = scrollHeight;
+  return this;
+}
+
+/**
+ * 獲取元素的 scrollLeft 屬性
+ * @returns {number} - 返回當前元素的 scrollLeft 屬性值
+ */
+export function getScrollLeft() {
+  return this.el.scrollLeft;
+}
+
+/**
+ * 設置元素的 scrollLeft 屬性
+ * @param {number} scrollLeft - 要設置的 scrollLeft 屬性值
+ * @returns {ZekiElement} - 返回當前的 ZekiElement 實例
+ */
+export function setScrollLeft(scrollLeft) {
+  this.el.scrollLeft = scrollLeft;
+  return this;
+}
+
+/**
  * 獲取元素的 scrollTop 屬性
  * @returns {number} - 返回當前元素的 scrollTop 屬性值
  */
@@ -510,6 +618,24 @@ export function getScrollTop() {
  */
 export function setScrollTop(scrollTop) {
   this.el.scrollTop = scrollTop;
+  return this;
+}
+
+/**
+ * 獲取元素的 scrollWidth 屬性
+ * @returns {number} - 返回當前元素的 scrollWidth 屬性值
+ */
+export function getScrollWidth() {
+  return this.el.scrollWidth;
+}
+
+/**
+ * 設置元素的 scrollWidth 屬性
+ * @param {number} scrollWidth - 要設置的 scrollWidth 屬性值
+ * @returns {ZekiElement} - 返回當前的 ZekiElement 實例
+ */
+export function setScrollWidth(scrollWidth) {
+  this.el.scrollWidth = scrollWidth;
   return this;
 }
 
