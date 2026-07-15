@@ -155,6 +155,17 @@ export function delKids(children) {
 }
 
 /**
+ *  replace Child
+ * @param {*} child - DOM 元素或 ZekiElement 實例
+ * @returns {ZekiElement} - 返回當前的 ZekiElement 實例
+ */
+export function replaceKid(child) {
+  child instanceof ZekiElement && (child = child.el);
+  this.el.replaceChildren(child);
+  return this;
+}
+
+/**
  * insert Before
  * @param {*} newNode - 新的 DOM 元素或 ZekiElement 實例
  * @param {*} referenceNode

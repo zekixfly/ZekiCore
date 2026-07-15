@@ -20,6 +20,7 @@ import {
   addKids,
   delKid,
   delKids,
+  replaceKid,
   before,
   addClass,
   delClass,
@@ -323,6 +324,12 @@ Object.defineProperties(ZekiElement.prototype, {
   },
   delKids: {
     value: delKids,
+    writable: false,
+    enumerable: true,
+    configurable: false,
+  },
+  replaceKid: {
+    value: replaceKid,
     writable: false,
     enumerable: true,
     configurable: false,

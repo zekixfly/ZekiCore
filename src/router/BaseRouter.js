@@ -98,7 +98,7 @@ export class BaseRouter {
 
             // 在切換前觸發 unmount 事件
             window.dispatchEvent(new Event("unmount"));
-            this.outlet.innerHTML = template.innerHTML;
+            this.outlet.replaceChildren(template.content.cloneNode(true));
             if (script) this.outlet.appendChild(script);
 
             // 重新抓取並綁定連結事件
